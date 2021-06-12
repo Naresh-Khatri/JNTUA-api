@@ -5,7 +5,10 @@ const ResultSchema = mongoose.Schema({
     resultId:String,
     failedCount: Number,
     sgpa: Number,
-    addedTime: Date,
+    addedTime: {
+        type: Date,
+        default: Date
+    },
     subjects: Array
 
 })

@@ -3,20 +3,22 @@ const express = require('express')
 const axios = require('axios')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
-const HtmlTableToJson = require('html-table-to-json');
 
-const Result = require('./mdoels/Result')
-
+const Result = require('./models/Result')
+const { getToken, convert2obj } = require('./utils/utils.js')
+const { AllResultsRows } = require('./utils/resultRows')
 const app = express()
 
 const PORT = process.env.PORT || 3000
 app.use(morgan('dev'))
 
+//allow cors
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     next()
 })
 
+//get all results
 app.get('/', async (req, res) => {
     try {
         const results = await Result.find()
@@ -25,6 +27,7 @@ app.get('/', async (req, res) => {
         res.json(err)
     }
 })
+//get specific result
 app.get('/:resultId/:htn', async (req, res) => {
     try {
         res.json(await getResult(req.params.resultId, req.params.htn))
@@ -32,6 +35,9 @@ app.get('/:resultId/:htn', async (req, res) => {
     catch (err) {
         res.status(404).json({ message: err })
     }
+})
+app.get('/resultRows', async (req, res) => {
+    res.json(await AllResultsRows())
 })
 app.use((req, res, next) => {
     const err = new Error('Not Found!')
@@ -50,18 +56,58 @@ app.use((err, req, res) => {
 })
 
 mongoose.connect(process.env.DB_CONNECTION,
-    { useNewUrlParser: true, useUnifiedTopology: true }, () => {
-        console.log('Connceted to DB!')
+    { useNewUrlParser: true, useUnifiedTopology: true }, (res) => {
+        if (res == null)
+            console.log('Connceted to DB!')
+        else
+            console.error(res)
     })
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
 
-let token = 3275841
+let token = 0
+//get token initially
+getToken().then(res => token = res)
 
-function getResult(resultId, htn) {
+async function getResult(resultId, htn) {
     return new Promise(async (resolve, reject) => {
+        try {
+            //check if result exist in db first 
+            const result = await getResultFromDB(resultId, htn)
+            resolve(result)
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+function getResultFromDB(resultId, htn) {
+    //find in db with htn and resultId
+    return new Promise((resolve, reject) => {
+        Result.find({
+            $and: [{ htn: htn }, { resultId: resultId }]
+        }, async (err, result) => {
+            if (err)
+                return reject(err)
+            if (result.length == 0) {
+                try {
+                    const result = await getResultFromJNTU(resultId, htn)
+                    resolve(result)
+                }
+                catch (err) {
+                    return reject(err)
+                }
+            }
+            else
+                return resolve(result)
+        })
+    })
+}
+
+function getResultFromJNTU(resultId, htn) {
+    return new Promise((resolve, reject) => {
         var config = {
             method: 'get',
             url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${resultId}&accessToken=${token}`,
@@ -74,7 +120,7 @@ function getResult(resultId, htn) {
                 if (res.data == 'Something goes wrong') {
                     console.log(res.data)
                     token = await getToken()
-                    return reject('Something goes wrong')
+                    return reject('Token updated please reload')
                 }
                 //check if token is expired
                 if (res.data == 'Invalid Token') {
@@ -83,25 +129,27 @@ function getResult(resultId, htn) {
                     return reject('Token updated please reload')
                 }
                 //reject if result not found
-                if (res.data.includes('Invalid')) {
-                    return reject('Result not found!')
+                if (res.data.includes('Invalid Hall Ticket Number')) {
+                    //removing <b> tag
+                    return reject(res.data.replace(/<\/?[^>]+(>|$)/g, ""))
                 }
                 let tableHTML = ''
                 for (let i = 0; i < res.data.length; i++) {
                     tableHTML += res.data[i]
                 }
-                //jntua is a peice of shit for not adding these closing 
+                //jntua is a fucking peice of shit for not adding these closing 
                 //such a pain 
                 tableHTML += '</th></tr></table>'
                 const resultObj = convert2obj(tableHTML, resultId)
+
                 const result = new Result(resultObj)
-                result.save()
-                    .then(data => {
-                        console.log(data)
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                // result.save()
+                //     .then(data => {
+                //         console.log(data)
+                //     })
+                //     .catch(err => {
+                //         console.log(err)
+                //     })
                 resolve(resultObj)
             })
             .catch(err => {
@@ -109,87 +157,5 @@ function getResult(resultId, htn) {
                 reject('Result not found')
             })
     })
-}
 
-function getToken() {
-    return new Promise((resolve, reject) => {
-        var config = {
-            method: 'get',
-            url: 'https://jntuaresults.ac.in/view-results-56736424.html',
-            headers: {
-                'Cookie': 'PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;',
-            },
-        };
-        axios(config)
-            .then((res) => {
-                const pageHTML = res.data
-                const token = parseInt(pageHTML.substring(
-                    pageHTML.indexOf('access'), pageHTML.indexOf('access') + 30
-                ))
-                resolve(token)
-            })
-            .catch(err => reject(err))
-
-    })
-}
-function parseInt(str) {
-    let num = ''
-    for (let i = 0; i < str.length; i++) {
-        num += Number.parseInt(str[i]) || str[i] == '0' ?
-            Number.parseInt(str[i]) : ''
-    }
-    return num
-}
-//returns a result object with all necessary info
-function convert2obj(tableHTML, resultId) {
-    const jsonTable = HtmlTableToJson.parse(tableHTML).results
-    //remove <table> --> &nbsp; --> <tags> --> htn title --> name title -->split by ' '
-    let studInfo = tableHTML.substring(0, tableHTML.indexOf('<br>'))
-        .replace(/&nbsp;|<\/?[^>]+(>|$)|Hall Ticket No :|Student name:/g, '')
-        .split(' ')
-
-    const resultObj = {}
-    resultObj['htn'] = studInfo[0]
-    resultObj['name'] = ''
-    for (let i = 1; i < studInfo.length; i++) {
-        resultObj['name'] += studInfo[i] + " "
-    }
-    const subjects = jsonTable[0]
-    const sgpa = getSGPA(subjects)
-    const failedCount = getFailedCount(subjects)
-    Object.assign(resultObj, { resultId, failedCount, sgpa, subjects })
-
-    return resultObj
-}
-
-function getSGPA(subjects) {
-    let G2GP = {
-        S: 10,
-        A: 9,
-        B: 8,
-        C: 7,
-        D: 6,
-        E: 5,
-        F: 0,
-        AB: 0
-    }
-    let totalCred = 0
-    let obtainedCred = 0
-    subjects.forEach(subject => {
-        obtainedCred += G2GP[subject.Grades] * subject.Credits
-        totalCred += Number.parseFloat(subject.Credits)
-    })
-    //check if totalCred is 0
-    if (totalCred == 0)
-        return 0
-    else
-        return (obtainedCred / totalCred).toFixed(2)
-}
-function getFailedCount(subjects) {
-    let count = 0
-    subjects.forEach(sub => {
-        if (sub.Credits == 0)
-            count++
-    })
-    return count
 }
