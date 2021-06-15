@@ -56,11 +56,11 @@ app.use((err, req, res) => {
 })
 
 mongoose.connect(process.env.DB_CONNECTION,
-    { useNewUrlParser: true, useUnifiedTopology: true }, (res) => {
-        if (res == null)
+    { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+        if (err == null)
             console.log('Connceted to DB!')
         else
-            console.error(res)
+            console.error(err)
     })
 
 app.listen(PORT, () => {
@@ -97,11 +97,12 @@ function getResultFromDB(resultId, htn) {
                     resolve(result)
                 }
                 catch (err) {
+                    console.log(err)
                     return reject(err)
                 }
             }
             else
-                return resolve(result)
+                return resolve(result[0])
         })
     })
 }
@@ -143,17 +144,18 @@ function getResultFromJNTU(resultId, htn) {
                 const resultObj = convert2obj(tableHTML, resultId)
 
                 const result = new Result(resultObj)
-                // result.save()
-                //     .then(data => {
-                //         console.log(data)
-                //     })
-                //     .catch(err => {
-                //         console.log(err)
-                //     })
+                result.save()
+                    .then(async(data) => {
+                        //console.log(data)
+                        resolve(await getResultFromDB(resultId, htn))
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
                 resolve(resultObj)
             })
             .catch(err => {
-                console.log(err)
+                console.log(err) 
                 reject('Result not found')
             })
     })

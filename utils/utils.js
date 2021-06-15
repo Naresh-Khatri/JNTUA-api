@@ -71,7 +71,6 @@ function getSGPA(subjects) {
     let flag = false
     subjects.forEach(subject => {
         //return sgpa as 0 if any subject has credit 0
-        console.log(subject.Credits)
         if (subject.Credits == 0 && subject.Grades == "F") {
             flag = true
         }
@@ -79,8 +78,10 @@ function getSGPA(subjects) {
         totalCred += Number.parseFloat(subject.Credits)
     })
     //check if totalCred is 0 ie AB or flag
-    if (totalCred == 0 || flag)
+    if (totalCred == 0)
         return 0
+    else if (flag)
+        return -1
     else
         return (obtainedCred / totalCred).toFixed(2)
 }
