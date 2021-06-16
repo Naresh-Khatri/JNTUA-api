@@ -31,7 +31,7 @@ function parseInt(str) {
     return num
 }
 //returns a result object with all necessary info
-function convert2obj(tableHTML, resultId) {
+function convert2obj(tableHTML, resultID) {
     const jsonTable = HtmlTableToJson.parse(tableHTML).results
     //remove <table> --> &nbsp; --> <tags> --> htn title --> name title -->split by ' '
     let studInfo = tableHTML.substring(0, tableHTML.indexOf('<br>'))
@@ -47,7 +47,7 @@ function convert2obj(tableHTML, resultId) {
     const subjects = jsonTable[0]
     const sgpa = getSGPA(subjects)
     const failedCount = getFailedCount(subjects)
-    Object.assign(resultObj, { resultId, failedCount, sgpa, subjects })
+    Object.assign(resultObj, { resultID, failedCount, sgpa, subjects })
 
     return resultObj
 }
@@ -93,11 +93,11 @@ function getFailedCount(subjects) {
     })
     return count
 }
-function getResultFromJNTU(resultId, htn) {
+function getResultFromJNTU(resultID, htn) {
     return new Promise((resolve, reject) => {
         var config = {
             method: 'get',
-            url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${resultId}&accessToken=${token}`,
+            url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${resultID}&accessToken=${token}`,
             headers: {
                 'Cookie': 'PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;',
             },
@@ -126,7 +126,7 @@ function getResultFromJNTU(resultId, htn) {
                 //jntua is a fucking peice of shit for not adding these closing 
                 //such a pain 
                 tableHTML += '</th></tr></table>'
-                const resultObj = convert2obj(tableHTML, resultId)
+                const resultObj = convert2obj(tableHTML, resultID)
                 const result = new Result(resultObj)
                 // result.save()
                 //     .then(data => {
@@ -144,16 +144,16 @@ function getResultFromJNTU(resultId, htn) {
     })
 
 }
-function getResultFromDB(resultId, htn) {
+function getResultFromDB(resultID, htn) {
     return new Promise((resolve, reject) => {
         Result.find({
-            $and: [{ htn: htn }, { resultId: resultId }]
+            $and: [{ htn: htn }, { resultID: resultID }]
         }, async (err, result) => {
             if (err)
                 return reject(err)
             if (result.length == 0) {
                 try {
-                    const result = await getResultFromJNTU(resultId, htn)
+                    const result = await getResultFromJNTU(resultID, htn)
                     resolve(result)
                 }
                 catch (err) {
