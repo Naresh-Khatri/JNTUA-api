@@ -70,8 +70,9 @@ function getSGPA(subjects) {
     //flag to check if any subject's cred is 0
     let flag = false
     subjects.forEach(subject => {
+        console.log(subject)
         //return sgpa as 0 if any subject has credit 0
-        if (subject.Credits == 0 && subject.Grades == "F") {
+        if (subject.Credits == 0 || subject.Grades == "F" || subject.Grades == "AB") {
             flag = true
         }
         obtainedCred += G2GP[subject.Grades] * subject.Credits
