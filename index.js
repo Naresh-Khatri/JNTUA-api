@@ -11,7 +11,7 @@ const app = express()
 
 const PORT = process.env.PORT || 3000
 app.use(morgan('dev'))
-
+app.use(express.json());
 //allow cors
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -36,8 +36,12 @@ app.get('/:resultID/:htn', async (req, res) => {
     res.status(404).json({ message: err })
   }
 })
-app.get('/semResults/:resultID/:startinghtn', async (req, res) => {
-  res.json(await getSemResult(req.params.resultID, req.params.startinghtn))
+app.get('/semResults/:resultID/:prefix/:start/:end', async (req, res) => {
+  res.json(await getSemResult(req.params.resultID, 
+    req.params.prefix,
+    req.params.start,
+    req.params.end))
+  // res.json(req.body)
 })
 app.get('/releasedResults', async (req, res) => {
   res.json(await AllResultsRows())
@@ -74,17 +78,16 @@ let token = 0
 //get token initially
 getToken().then(res => token = res)
 
-async function getSemResult(resultID, startinghtn) {
+async function getSemResult(resultID, prefix, start, end) {
   return new Promise(async (resolve, reject) => {
     try {
       //check if result exist in db first 
       let resultList = []
-      for (let i = 0; i < 100; i++) {
+      for (let i = start; i < end; i++) {
         try {
-
-          resultList.push(await getResultFromDB(resultID, startinghtn +
+          resultList.push(await getResultFromDB(resultID, prefix +
             (i < 10 ? `0${i}` : i)))
-          console.log(resultList)
+          //console.log(resultList)
         } catch (err) {
           console.log(err)
         }
