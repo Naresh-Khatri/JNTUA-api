@@ -14,7 +14,7 @@ const AllResultsRows = function () {
                 const table = soup.findAll('table')[1]
                 const tr = table.findAll('tr')
                 const resultRows = []
-                for (let i = 1; i < 200; i++) {
+                for (let i = 1; i < tr.length; i++) {
                     resultRows.push(getResultInfoObj(tr[i].find('a').nextElement._text, tr[i].find('a').attrs.href))
                 }
                 resolve(resultRows)
