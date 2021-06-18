@@ -76,6 +76,14 @@ function getSGPA(subjects) {
             || subject.Grades == "AB") {
             flag = true
         }
+
+        // this is yet another check to set flag true 
+        // JNTU is a big pile of dog shit, they switched 
+        // Credits column with Grades when student is detained
+        if (subject.Grades == 0 && subject.Credits == "F") {
+            flag = true
+        }
+        console.log(obtainedCred, totalCred)
         obtainedCred += G2GP[subject.Grades] * subject.Credits
         totalCred += Number.parseFloat(subject.Credits)
     })
@@ -90,8 +98,10 @@ function getSGPA(subjects) {
 function getFailedCount(subjects) {
     let count = 0
     subjects.forEach(sub => {
-        if (sub.Credits == 0)
+        if ((sub.Credits == 0 && sub.Grades == "F")
+            || sub.Grades == "AB") {
             count++
+        }
     })
     return count
 }
