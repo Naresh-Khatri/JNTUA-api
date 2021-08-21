@@ -31,7 +31,7 @@ function parseInt(str) {
     return num
 }
 //returns a result object with all necessary info
-function convert2obj(tableHTML, resultID) {
+    function convert2obj(tableHTML, resultID) {
     const jsonTable = HtmlTableToJson.parse(tableHTML).results
     //remove <table> --> &nbsp; --> <tags> --> htn title --> name title -->split by ' '
     let studInfo = tableHTML.substring(0, tableHTML.indexOf('<br>'))
