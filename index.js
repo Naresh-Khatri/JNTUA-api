@@ -5,7 +5,11 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 
 const Result = require('./models/Result')
+<<<<<<< HEAD
 const Feedback = require('./models/Feedback')
+=======
+const Feedback = require('./models/feedback')
+>>>>>>> 63ea95a785863dfccc13c553797aede188108bc2
 const { getToken, convert2obj } = require('./utils/utils.js')
 const { AllResultsRows } = require('./utils/resultRows')
 const app = express()
