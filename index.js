@@ -5,18 +5,21 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 
 const Result = require('./models/Result')
+const Feedback = require('./models/Feedback')
 const { getToken, convert2obj } = require('./utils/utils.js')
 const { AllResultsRows } = require('./utils/resultRows')
 const app = express()
 
 const PORT = process.env.PORT || 3000
-app.use(morgan('dev'))
-app.use(express.json());
 //allow cors
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
+  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
+  res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
   next()
 })
+app.use(morgan('dev'))
+app.use(express.json());
 
 //get all results
 app.get('/', async (req, res) => {
@@ -46,21 +49,31 @@ app.get('/semResults/:resultID/:prefix/:start/:end', async (req, res) => {
 app.get('/releasedResults', async (req, res) => {
   res.json(await AllResultsRows())
 })
-app.use((req, res, next) => {
-  const err = new Error('Not Found!')
-  err.status = 404
-  next(err)
+app.post('/feedback', async(req, res)=>{
+  console.log(req.body)
+
+  const feedback = new Feedback(req.body)
+  feedback.save()
+  .then(result=>{
+    console.log(result)
+    res.status(200).send(result)
+  })
 })
-app.use((err, req, res) => {
-  {
-    res.status(err.status || 500)
-    res.json({
-      error: {
-        message: error.message
-      }
-    })
-  }
-})
+// app.use((req, res, next) => {
+//   const err = new Error('Not Found!')
+//   err.status = 404
+//   next(err)
+// })
+// app.use((err, req, res) => {
+//   {
+//     res.status(err.status || 500)
+//     res.json({
+//       error: {
+//         message: error.message
+//       }
+//     })
+//   }
+// })
 
 mongoose.connect(process.env.DB_CONNECTION,
   { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
