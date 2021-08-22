@@ -5,11 +5,8 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 
 const Result = require('./models/Result')
-<<<<<<< HEAD
 const Feedback = require('./models/Feedback')
-=======
-const Feedback = require('./models/feedback')
->>>>>>> 63ea95a785863dfccc13c553797aede188108bc2
+const Shared = require('./models/Shared')
 const { getToken, convert2obj } = require('./utils/utils.js')
 const { AllResultsRows } = require('./utils/resultRows')
 const app = express()
@@ -55,13 +52,18 @@ app.get('/releasedResults', async (req, res) => {
 })
 app.post('/feedback', async(req, res)=>{
   console.log(req.body)
-
   const feedback = new Feedback(req.body)
   feedback.save()
   .then(result=>{
     console.log(result)
     res.status(200).send(result)
   })
+})
+app.post('/shared',async(req, res)=>{
+  console.log(req.body)
+  const shared = new Shared(req.body)
+  shared.save()
+  res.status(200).send()
 })
 // app.use((req, res, next) => {
 //   const err = new Error('Not Found!')
