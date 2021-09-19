@@ -23,9 +23,15 @@ app.use(morgan('dev'))
 app.use(express.json());
 
 //get all results
-app.get('/', async (req, res) => {
+app.get('/stats/:page', async (req, res) => {
   try {
-    const results = await Result.find()
+    const results = {
+      count: await Result.find().countDocuments(),
+      student: await Result.find({}, '-_id htn name addedTime').sort({ addedTime: -1 }).limit(req.params.page * 50),
+    }
+    for (let i = 0; i < results.student.length; i++) {
+      results.student[i]._doc['localTime'] = new Date(results.student[0].addedTime).toLocaleString()
+    }
     res.json(results)
   } catch (err) {
     res.json(err)
@@ -41,7 +47,7 @@ app.get('/:resultID/:htn', async (req, res) => {
   }
 })
 app.get('/semResults/:resultID/:prefix/:start/:end', async (req, res) => {
-  res.json(await getSemResult(req.params.resultID, 
+  res.json(await getSemResult(req.params.resultID,
     req.params.prefix,
     req.params.start,
     req.params.end))
@@ -50,16 +56,16 @@ app.get('/semResults/:resultID/:prefix/:start/:end', async (req, res) => {
 app.get('/releasedResults', async (req, res) => {
   res.json(await AllResultsRows())
 })
-app.post('/feedback', async(req, res)=>{
+app.post('/feedback', async (req, res) => {
   console.log(req.body)
   const feedback = new Feedback(req.body)
   feedback.save()
-  .then(result=>{
-    console.log(result)
-    res.status(200).send(result)
-  })
+    .then(result => {
+      console.log(result)
+      res.status(200).send(result)
+    })
 })
-app.post('/shared',async(req, res)=>{
+app.post('/shared', async (req, res) => {
   console.log(req.body)
   const shared = new Shared(req.body)
   shared.save()
