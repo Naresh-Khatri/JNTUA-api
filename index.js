@@ -27,15 +27,30 @@ app.get('/stats/:page', async (req, res) => {
   try {
     const results = {
       count: await Result.find().countDocuments(),
-      student: await Result.find({}, '-_id htn name addedTime').sort({ addedTime: -1 }).limit(req.params.page * 50),
+      students: await Result.find({}, '-_id htn name addedTime').sort({ addedTime: -1 }).limit(req.params.page * 50),
     }
-    for (let i = 0; i < results.student.length; i++) {
-      results.student[i]._doc['localTime'] = new Date(new Date(results.student[0].addedTime).getTime() + 330 * 60 * 1000)
+
+    //create obj to store stats
+    searchCount = {}
+    for (let i = 0; i < results.students.length; i++) {
+      //count searchCount for each college
+      if (!Object.keys(searchCount).includes((results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()))
+        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()] = 1
+      else
+        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()]++
+
+
+      results.students[i]._doc['localTime'] =
+        new Date(new Date(results.students[i].addedTime).getTime() + 330 * 60 * 1000)
+      delete results.students[i]._doc['addedTime']
     }
-res.json(results)
+    const sendRes = { count: results.count, colleges: searchCount, students :results.students}
+    delete results
+    // console.log(results)
+    res.json(sendRes)
   } catch (err) {
-  res.json(err)
-}
+    res.json(err)
+  }
 })
 //get specific result
 app.get('/:resultID/:htn', async (req, res) => {
