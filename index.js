@@ -52,6 +52,14 @@ app.get('/stats/:page', async (req, res) => {
     res.json(err)
   }
 })
+app.get('/feedbacks', async (req, res)=>{
+  try {
+    const feedbacks = await Feedback.find({}, '-_id name email text addedTime')
+    res.send(feedbacks)
+  } catch (error) {
+    console.log(error)
+  }
+})
 //get specific result
 app.get('/:resultID/:htn', async (req, res) => {
   try {
