@@ -40,8 +40,8 @@ app.get('/stats/:page', async (req, res) => {
         searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()]++
 
 
-      results.students[i]._doc['localTime'] =
-        new Date(new Date(results.students[i].addedTime).getTime() + 330 * 60 * 1000)
+      results.students[i]._doc['time'] =
+        new Date(new Date(results.students[i].addedTime).getTime() + 330 * 60 * 1000).toUTCString()
       delete results.students[i]._doc['addedTime']
     }
     const sendRes = { count: results.count, colleges: searchCount, students :results.students}
