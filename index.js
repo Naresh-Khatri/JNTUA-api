@@ -30,12 +30,12 @@ app.get('/stats/:page', async (req, res) => {
       student: await Result.find({}, '-_id htn name addedTime').sort({ addedTime: -1 }).limit(req.params.page * 50),
     }
     for (let i = 0; i < results.student.length; i++) {
-      results.student[i]._doc['localTime'] = new Date(results.student[0].addedTime).toLocaleString()
+      results.student[i]._doc['localTime'] = new Date(new Date(results.student[0].addedTime).getTime() + 330 * 60 * 1000)
     }
-    res.json(results)
+res.json(results)
   } catch (err) {
-    res.json(err)
-  }
+  res.json(err)
+}
 })
 //get specific result
 app.get('/:resultID/:htn', async (req, res) => {
