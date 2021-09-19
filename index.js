@@ -60,6 +60,14 @@ app.get('/feedbacks', async (req, res)=>{
     console.log(error)
   }
 })
+app.get('/shares', async (req, res)=>{
+  try {
+    const shares = await Shared.find({}, "-_id -__v")
+    res.send(shares)
+  } catch (error) {
+    console.log(error)
+  }
+})
 //get specific result
 app.get('/:resultID/:htn', async (req, res) => {
   try {
