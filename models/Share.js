@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const sharedSchema = mongoose.Schema({
+const shareSchema = mongoose.Schema({
     resultID: String,
     htns: Array,
     type: String,
@@ -10,4 +10,4 @@ const sharedSchema = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('Shared', sharedSchema)
+module.exports = mongoose.model('Share', shareSchema)
