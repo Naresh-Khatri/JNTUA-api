@@ -6,10 +6,12 @@ const mongoose = require('mongoose')
 
 const Result = require('./models/Result')
 const Feedback = require('./models/Feedback')
-const Shared = require('./models/Shared')
+const Share = require('./models/Share')
 const { getToken, convert2obj } = require('./utils/utils.js')
+
 const { AllResultsRows } = require('./utils/resultRows')
 const app = express()
+const stats = require('./routes/stats')
 
 const PORT = process.env.PORT || 3000
 //allow cors
@@ -21,55 +23,11 @@ app.use((req, res, next) => {
 })
 app.use(morgan('dev'))
 app.use(express.json());
-
-//get all results
-app.get('/stats/:page', async (req, res) => {
-  try {
-    const results = {
-      count: await Result.find().countDocuments(),
-      students: await Result.find({}, '-_id htn name addedTime').sort({ addedTime: -1 }).limit(req.params.page * 50),
-    }
-
-    //create obj to store stats
-    searchCount = {}
-    for (let i = 0; i < results.students.length; i++) {
-      //count searchCount for each college
-      if (!Object.keys(searchCount).includes((results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()))
-        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()] = 1
-      else
-        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()]++
+app.use('/stats', stats)
 
 
-      results.students[i]._doc['time'] =
-        new Date(new Date(results.students[i].addedTime).getTime() + 330 * 60 * 1000).toUTCString()
-      delete results.students[i]._doc['addedTime']
-    }
-    const sendRes = { count: results.count, colleges: searchCount, students :results.students}
-    delete results
-    // console.log(results)
-    res.json(sendRes)
-  } catch (err) {
-    res.json(err)
-  }
-})
-app.get('/feedbacks', async (req, res)=>{
-  try {
-    const feedbacks = await Feedback.find({}, '-_id name email text addedTime')
-    res.send(feedbacks)
-  } catch (error) {
-    console.log(error)
-  }
-})
-app.get('/shares', async (req, res)=>{
-  try {
-    const shares = await Shared.find({}, "-_id -__v")
-    res.send(shares)
-  } catch (error) {
-    console.log(error)
-  }
-})
 //get specific result
-app.get('/:resultID/:htn', async (req, res) => {
+app.get('/singleResult/:resultID/:htn', async (req, res) => {
   try {
     res.json(await getResult(req.params.resultID, req.params.htn))
   }
@@ -96,10 +54,10 @@ app.post('/feedback', async (req, res) => {
       res.status(200).send(result)
     })
 })
-app.post('/shared', async (req, res) => {
+app.post('/share', async (req, res) => {
   console.log(req.body)
-  const shared = new Shared(req.body)
-  shared.save()
+  const share = new Share(req.body)
+  share.save()
   res.status(200).send()
 })
 // app.use((req, res, next) => {
