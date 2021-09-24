@@ -7,9 +7,12 @@ const mongoose = require('mongoose')
 const Result = require('./models/Result')
 const Feedback = require('./models/Feedback')
 const Share = require('./models/Share')
-const { getToken, convert2obj } = require('./utils/utils.js')
+const Analytics = require('./models/Analytics')
 
+const { getToken, convert2obj } = require('./utils/utils.js')
 const { AllResultsRows } = require('./utils/resultRows')
+
+
 const app = express()
 const stats = require('./routes/stats')
 
@@ -128,6 +131,7 @@ async function getResult(resultID, htn) {
 function getResultFromDB(resultID, htn) {
   //find in db with htn and resultID
   return new Promise((resolve, reject) => {
+    addAnalytics(resultID, htn)
     Result.find({
       $and: [{ htn: htn }, { resultID: resultID }]
     }, async (err, result) => {
@@ -139,7 +143,7 @@ function getResultFromDB(resultID, htn) {
           resolve(result)
         }
         catch (err) {
-          console.log(err)
+          // console.log(err)
           return reject(err)
         }
       }
@@ -180,7 +184,7 @@ function getResultFromJNTU(resultID, htn) {
         for (let i = 0; i < res.data.length; i++) {
           tableHTML += res.data[i]
         }
-        //jntua is a fucking peice of shit for not adding these closing 
+        //jntua is a fucking peice of shit for not adding these closings
         //such a pain 
         tableHTML += '</th></tr></table>'
         const resultObj = convert2obj(tableHTML, resultID)
@@ -202,4 +206,30 @@ function getResultFromJNTU(resultID, htn) {
       })
   })
 
+}
+function addAnalytics(resultID, htn) {
+  Analytics.find({ resultID, htn }, async (err, result) => {
+    if (err) {
+      console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
+    }
+    else {
+      //result exist
+      if (result.length) {
+        Analytics.findOne({ htn, resultID })
+          .then((result, err) => {
+            //increase count, update time and save
+            result.count += 1
+            result.latest = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
+            result.save()
+          })
+      }
+      else {
+        //add new entry with count=1, current time and save
+        const anal = new Analytics({
+          htn, resultID, count: 1,latest:new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
+        })
+        anal.save()
+      }
+    }
+  })
 }
