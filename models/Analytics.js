@@ -4,6 +4,5 @@ const AnalyticsSchema = mongoose.Schema({
     resultID: String,
     latest: Date,
     count: Number,
-
 })
 module.exports = mongoose.model('Analytics', AnalyticsSchema)

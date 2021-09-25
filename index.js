@@ -226,7 +226,9 @@ function addAnalytics(resultID, htn) {
       else {
         //add new entry with count=1, current time and save
         const anal = new Analytics({
-          htn, resultID, count: 1,latest:new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
+          htn,
+          resultID,
+          count: 1,latest: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
         })
         anal.save()
       }

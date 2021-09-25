@@ -38,7 +38,7 @@ router.get('/all/:page', async (req, res) => {
   try {
     const results = {
       count: await Analytics.find().countDocuments(),
-      students: await Analytics.find({}, '-_id -__v').sort({ addedTime: -1 }).limit(req.params.page * 50),
+      students: await Analytics.find({}, '-_id -__v').sort({ latest: -1 }).limit(req.params.page * 50),
     }
     //create obj to store stats
     searchCount = {}
@@ -51,7 +51,8 @@ router.get('/all/:page', async (req, res) => {
 
       //change time to match timezon
       results.students[i]._doc['time'] =
-        new Date(new Date(results.students[i].latest).getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
+        new Date(new Date(results.students[i].latest).getTime() + 330
+          * 60 * 1000).toUTCString()
       delete results.students[i]._doc['latest']
     }
     const sendRes = { count: results.count, colleges: searchCount, students: results.students }
