@@ -5,6 +5,46 @@ const Feedback = require('../models/Feedback')
 const Share = require('../models/Share')
 const Analytics = require('../models/Analytics')
 
+const collegesInfo = require('../collegeInfo.json')
+
+router.get('/public', async (req, res) => {
+  try {
+    const results = {
+      count: await Result.find().countDocuments(),
+      students: await Result.find({}, '-_id htn').sort({ addedTime: -1 }).limit(req.params.page * 50),
+    }
+    // console.log(results.students)
+    //create obj to store stats
+    searchCount = {}
+    for (let i = 0; i < results.students.length; i++) {
+      //count searchCount for each college
+      if (!Object.keys(searchCount).includes((results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()))
+      searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()] = 1
+      else
+      searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()]++
+    }
+    let arr = Object.entries(searchCount)
+    arr.sort(([a,b],[c,d])=>d-b)
+    const topColleges = []
+    for (let i = 0; i < 3; i++) {
+        //loop through entire json to fine college name for code
+        collegesInfo.forEach(college => {
+          if(college.collegeCode.toLowerCase() == arr[i][0].toLowerCase())
+          topColleges.push(college)
+        });
+    }
+    console.log('topColleges')
+
+    const sendRes = { count: results.count, colleges: searchCount,topColleges}
+    delete results
+    console.log(sendRes)
+    res.json(sendRes)
+  } catch (err) {
+    console.log(err)
+    res.json(err)
+  }
+})
+
 //get all results
 router.get('/new/:page', async (req, res) => {
   try {

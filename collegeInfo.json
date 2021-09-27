@@ -1,0 +1,1388 @@
+[
+  {
+    "collegeCode": "E8",
+    "counsellingCode": "ALFA",
+    "collegeName": "Alfa College of Engineering and Technology",
+    "URL": "http://www.alfacet.org",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JP",
+    "counsellingCode": "BVRT",
+    "collegeName": "B.V.R Institute of Engineering and Technology",
+    "URL": "http://www.bvriet.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "2K",
+    "counsellingCode": "BEMA",
+    "collegeName": "Bheema Institute of Technology and Science",
+    "URL": "http://www.bitsadoni.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JC",
+    "counsellingCode": "BEMA",
+    "collegeName": "Bheemi Reddy Institute of Management Science",
+    "URL": "http://www.bimsadoni.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "2N",
+    "counsellingCode": "BRNK",
+    "collegeName": "Brindavan Institute of Technology and Science",
+    "URL": "www.bitsKurnool.edu.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "Y0",
+    "counsellingCode": "CRKN",
+    "collegeName": "Creative Educational Societys College of Pharmacy",
+    "URL": "http://www.cescop.org",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JW",
+    "counsellingCode": "–",
+    "collegeName": "Dr.Jyothiramayi Degree College MBA",
+    "URL": "djdcmba.org.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "2T",
+    "counsellingCode": "KVSW",
+    "collegeName": "Dr.K.V.Subba Reddy College of Engineering for Women",
+    "URL": "http://www.kvsw.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JH",
+    "counsellingCode": "KVSM",
+    "collegeName": "Dr.K.V.Subba Reddy Institute of Management",
+    "URL": "http://www.drkvsrimba.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JJ",
+    "counsellingCode": "KVSK",
+    "collegeName": "Dr.K.V.Subba Reddy School of Business Management",
+    "URL": "http://www.drkvsbschool.in/",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "ER",
+    "counsellingCode": "KVSP",
+    "collegeName": "Dr.K.V.Subba Reddy Institute of Pharmacy",
+    "URL": "http://www.drkvsrip.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "FH",
+    "counsellingCode": "KVSR",
+    "collegeName": "Dr.K.V.Subba Reddy Institute of Technology",
+    "URL": "http://www.drkvsrit.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "9X",
+    "counsellingCode": "GPRE",
+    "collegeName": "G.Pulla Reddy Engineering College",
+    "URL": "http://www.gprec.ac.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "AT",
+    "counsellingCode": "PCEK",
+    "collegeName": "G.Pullaiah College of Engineering and Technology",
+    "URL": "http://www.gpcet.ac.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "2J",
+    "counsellingCode": "GCET",
+    "collegeName": "Geethanjali College of Engineering and Tech",
+    "URL": "http://www.avrsvrecknl.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "3C",
+    "counsellingCode": "INPW",
+    "collegeName": "Indira Priyadarshini College of Engineering and Technology for Women",
+    "URL": "http://www.Indirapriyadarshini.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "EH",
+    "counsellingCode": "KTMK",
+    "collegeName": "Kottam College of Engineering",
+    "URL": "http://www.kottam.org",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "3J",
+    "counsellingCode": "KKIT",
+    "collegeName": "Kottam Karunakara Reddy Institute of Technology",
+    "URL": "http://www.kottam.org",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JT",
+    "counsellingCode": "—",
+    "collegeName": "Prabhath Institute of Business Management",
+    "URL": "www.prabhath.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JU",
+    "counsellingCode": "—",
+    "collegeName": "Prabhath Institute of Computer Sciences",
+    "URL": "www.prabhath.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "4R",
+    "counsellingCode": "PBTP",
+    "collegeName": "Prabhath Institute of Pharmacy",
+    "URL": "http://www.prabhathedu.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "09",
+    "counsellingCode": "RGIT",
+    "collegeName": "Rajeev Gandhi Memorial College of Engineering and Technology",
+    "URL": "http://www.rgitnandyal.com , http://www.rgmcet.edu.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "3T",
+    "counsellingCode": "RAVW",
+    "collegeName": "Ravindra College of Engineering for Women",
+    "URL": "http://www.recw.ac.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "K5",
+    "counsellingCode": "SAFA",
+    "collegeName": "Safa College of Engineering and Technology",
+    "URL": "http://www.safa.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "Q2",
+    "counsellingCode": "SFAP",
+    "collegeName": "Safa College of Pharmacy",
+    "URL": "http://www.safapharma.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "HC",
+    "counsellingCode": "SRCN",
+    "collegeName": "Santhiram College of Pharmacy",
+    "URL": "http://www.srcpnandyal.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "X5",
+    "counsellingCode": "SREC",
+    "collegeName": "Santhiram Engineering College",
+    "URL": "www.srecnandyal.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "9G",
+    "counsellingCode": "SECT",
+    "collegeName": "Srinivasa College of Engineering and Technology",
+    "URL": "http://www.sectknl.ac.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "G3",
+    "counsellingCode": "JONY",
+    "collegeName": "St. Johns College of Engineering and Technology",
+    "URL": "http://www.sjcet.ac.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "EA",
+    "counsellingCode": "JNYP",
+    "collegeName": "St. Johns College of Pharmaceutical Sciences",
+    "URL": "http://www.sjcps.ac.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "BM",
+    "counsellingCode": "STFN",
+    "collegeName": "Stanley Stephen College of Engineering and Technology",
+    "URL": "http://www.stanleystephen.edu.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "HZ",
+    "counsellingCode": "O",
+    "collegeName": "Sumourya Institute of Management",
+    "URL": "http://www.sumourya.org.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "AM",
+    "counsellingCode": "ASVR",
+    "collegeName": "SVR Engineering College",
+    "URL": "http://www.svrec.ac.in",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "JQ",
+    "counsellingCode": "ASVS",
+    "collegeName": "SVR Institute of Management",
+    "URL": "http://www.svriom.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "4K",
+    "counsellingCode": "SYLW",
+    "collegeName": "Syamaladevi Institute of Technology for Women",
+    "URL": "http://www.sditwnandyal.com",
+    "district": "Kurnool"
+  },
+  {
+    "collegeCode": "4H",
+    "counsellingCode": "0000",
+    "collegeName": "Sri Chaitanya Institute of Engineering and Technology",
+    "URL": "http://www.sscet.co.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "2G",
+    "counsellingCode": "ALTS",
+    "collegeName": "Anantha Lakshmi Institute of Technology and Sciences",
+    "URL": "http://www.alits.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "T1",
+    "counsellingCode": "BALA",
+    "collegeName": "Balaji College of Pharmacy",
+    "URL": "http://www.balajipharmacy.org",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "F3",
+    "counsellingCode": "BTHP",
+    "collegeName": "BIT Institute of Technology",
+    "URL": "http://www.bitit.org",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "JD",
+    "counsellingCode": "CRMT",
+    "collegeName": "Chiranjeevi Reddy Group of Institutions",
+    "URL": "http://www.crgroups.com",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "2R",
+    "counsellingCode": "CRIT",
+    "collegeName": "Chiranjeevi Reddy Institute of Engineering and Technology",
+    "URL": "www.crit.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "F2",
+    "counsellingCode": "GATE",
+    "collegeName": "Gates Institute of Technology",
+    "URL": "www.gatesit.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "74",
+    "counsellingCode": "INTL",
+    "collegeName": "Intell Engineering College",
+    "URL": "http://www.intellengg.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "F5",
+    "counsellingCode": "IITA",
+    "collegeName": "Intellectual Institute of Technology Formerly Moula Ali College of Engineering and Technology",
+    "URL": "http://www.iitatp.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "3N",
+    "counsellingCode": "PVKK",
+    "collegeName": "P.V.K.K. Institute of Technology",
+    "URL": "http://www.pvkkit.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "KG",
+    "counsellingCode": "NA",
+    "collegeName": "Raghavendra Institute of Management Sciences",
+    "URL": "www.rimsatp.org",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "L8",
+    "counsellingCode": "RIPA",
+    "collegeName": "Raghavendra Institute of Pharmaceutical Education and Research",
+    "URL": "www.riper.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "HX",
+    "counsellingCode": "SSSB",
+    "collegeName": "Sanskrithi School of Business",
+    "URL": "https://sanskrithibschool.com/",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "KF",
+    "counsellingCode": "SSSE",
+    "collegeName": "Sanskrithi School of Engineering",
+    "URL": "http://sseptp.org/",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "4D",
+    "counsellingCode": "NA",
+    "collegeName": "Shri Sai Institute of Engineering and Technology",
+    "URL": "www.ssea.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "9A",
+    "counsellingCode": "SSSS",
+    "collegeName": "Shri Shirdi Sai Institute of Science and Engineering",
+    "URL": "www.ssss.ac.n",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "KE",
+    "counsellingCode": "CVRT",
+    "collegeName": "C.V.Raman Institute of Management Studies",
+    "URL": "www.scvrims.com",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "9B",
+    "counsellingCode": "CVRT",
+    "collegeName": "Sir C.V.Raman Institute of Technology and Sciences",
+    "URL": "http://www.scvrits.com",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "HY",
+    "counsellingCode": "SVMC",
+    "collegeName": "Sree Vyshnavi MBA College",
+    "URL": "http://www.svmbac.org",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "JY",
+    "counsellingCode": "NA",
+    "collegeName": "Sri Balaji P.G College MBA",
+    "URL": "http://www.balajiablj.org",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "JX",
+    "counsellingCode": "NA",
+    "collegeName": "Sri Balaji P.G College MCA",
+    "URL": "www.sribalajimbamca.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "G8",
+    "counsellingCode": "KDEG",
+    "collegeName": "Sri Krishna Devaraya Engineering College",
+    "URL": "http://www.skdengg.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "9U",
+    "counsellingCode": "SSIM",
+    "collegeName": "Sri Srinivasa Institute of Management",
+    "URL": "http://www.ssimedu.org",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "9F",
+    "counsellingCode": "SVIT",
+    "collegeName": "Sri Venkateswara Institute of Technology",
+    "URL": "http://svitatp.ac.in/",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "4G",
+    "counsellingCode": "SRIT",
+    "collegeName": "Srinivasa Ramanujan Institute of Technology",
+    "URL": "http://www.srit.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "JF",
+    "counsellingCode": "CESM",
+    "collegeName": "St.Mark Educational Institution Society Group of Institution",
+    "URL": "www.cesm.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "HU",
+    "counsellingCode": "TECH",
+    "collegeName": "Tadipatri Engineering College",
+    "URL": "http://www.tec.ac.in",
+    "district": "Anantapur"
+  },
+  {
+    "collegeCode": "HN",
+    "counsellingCode": "AECN",
+    "collegeName": "Andhra Engineering College",
+    "URL": "http://www.aecn.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "G2",
+    "counsellingCode": "SANK",
+    "collegeName": "Audisankara College of Engineering and Technology",
+    "URL": "http://www.audisankara.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "HP",
+    "counsellingCode": "ASCW",
+    "collegeName": "Audisankara College of Engineering for Women",
+    "URL": "http://www.audisankarawomen.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "9Q",
+    "counsellingCode": "ASPG",
+    "collegeName": "Audisankara College of P.G. Studies",
+    "URL": "http://www.audisankarapg.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "2H",
+    "counsellingCode": "ASIT",
+    "collegeName": "Audisankara Institute of Technology",
+    "URL": "http://www.audisankarait.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "H0",
+    "counsellingCode": "AVVN",
+    "collegeName": "AVS College of Engineering and Technology",
+    "URL": "http://www.avsenggcollege.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "3K",
+    "counsellingCode": "BEAM",
+    "collegeName": "Balaji Institute of Engineering and Management Studies",
+    "URL": "www.beam.edu.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "2M",
+    "counsellingCode": "BCEN",
+    "collegeName": "Brahmaiah College of Engineering",
+    "URL": "http://www.bcen.edu.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "8T",
+    "counsellingCode": "DSIT",
+    "collegeName": "Damisetty Bala Suresh Institute of Technology",
+    "URL": "http://www.dbsinstitutions.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "2U",
+    "counsellingCode": "GTNN",
+    "collegeName": "Geethanjali Institute of Science and Technology",
+    "URL": "http://www.gist.edu.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "F8",
+    "counsellingCode": "GKCS",
+    "collegeName": "Gokula Krishna College of Engineering",
+    "URL": "www.gkcesp.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "Z7",
+    "counsellingCode": "GKPS",
+    "collegeName": "Gokula Krishna College of Pharmacy",
+    "URL": "http://www.gkcp.edu.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "3E",
+    "counsellingCode": "JGNN",
+    "collegeName": "Jagans College of Engineering and Technology",
+    "URL": "http://www.jagans.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "Y1",
+    "counsellingCode": "JAGN",
+    "collegeName": "Jagans College of Pharmacy",
+    "URL": "www.jaganspharmacycollege.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "8W",
+    "counsellingCode": "KSNK",
+    "collegeName": "KSN Institute of Technology",
+    "URL": "http://www.ksnit.org",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "HG",
+    "counsellingCode": "MAST",
+    "collegeName": "Master Institute of Management Science and Technology",
+    "URL": "http://www.masterkavali.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "L4",
+    "counsellingCode": "MRMU",
+    "collegeName": "MEKAPATI RAJAMOHAN REDDY INSTITUTE OF TECHNOLOGY AND SCIENCE",
+    "URL": "www.meritstech.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "KB",
+    "counsellingCode": "NBKR",
+    "collegeName": "N.B.K.R. Institute of Science and Technology",
+    "URL": "www.nbkrist.org",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "F1",
+    "counsellingCode": "NRNG",
+    "collegeName": "Narayana Engineering College",
+    "URL": "http://necg.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "71",
+    "counsellingCode": "NARN",
+    "collegeName": "Narayana Engineering College",
+    "URL": "http://www.necNellore.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "4Q",
+    "counsellingCode": "NRNP",
+    "collegeName": "Narayana Pharmacy College",
+    "URL": "http://www.narayanapharmacycollege.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "HF",
+    "counsellingCode": "NBLB",
+    "collegeName": "Noble College of Computer Sciences MBA",
+    "URL": "http://www.noblecollegekvl.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "73",
+    "counsellingCode": "VITK",
+    "collegeName": "Parvatha Reddy Babul Reddy Visvodaya Institute of Technology and Science",
+    "URL": "http://www.visvodayata.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "G1",
+    "counsellingCode": "PDCS",
+    "collegeName": "Priyadarshini College of Engineering",
+    "URL": "www.pcespt.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "R6",
+    "counsellingCode": "PRIK",
+    "collegeName": "Priyadarshini College of Engineering Technology",
+    "URL": "http://www.pcenlr.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "8Z",
+    "counsellingCode": "PINN",
+    "collegeName": "Priyadarshini Institute of Technology",
+    "URL": "http://www.pitnlr.ac.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "K2",
+    "counsellingCode": "QUBA",
+    "collegeName": "Quba College of Engineering and Technology",
+    "URL": "http://www.qubacollege.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "3R",
+    "counsellingCode": "RSRN",
+    "collegeName": "Rami Reddy Subbarami Reddy Engineering College",
+    "URL": "http://www.rsrec.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "P2",
+    "counsellingCode": "RAOS",
+    "collegeName": "Raos College of Pharmacy",
+    "URL": "www.raosinstitutions.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "DM",
+    "counsellingCode": "RESN",
+    "collegeName": "Ratnam Institute of Pharmacy",
+    "URL": "www.ratnampharma.edu.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "CN",
+    "counsellingCode": "CHVN",
+    "collegeName": "S.Chaavan College of Pharmacy",
+    "URL": "http://www.schaavanpharmacycollege.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "DK",
+    "counsellingCode": "SCON",
+    "collegeName": "Saastra College of Pharmaceutical Educational and Research",
+    "URL": "http://www.saastracollege.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "DJ",
+    "counsellingCode": "SRCP",
+    "collegeName": "Sashikanth Reddy College of Pharmacy",
+    "URL": "www.lendiedu.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "9C",
+    "counsellingCode": "SKRT",
+    "collegeName": "SKR College of Engineering and Technology",
+    "URL": "http://www.skrcet.org",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "JN",
+    "counsellingCode": "SVCN",
+    "collegeName": "Sree Venkateswara College of Engineering",
+    "URL": "http://www.sves.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "9D",
+    "counsellingCode": "",
+    "collegeName": "Sri Padmavathi Engineering College",
+    "URL": "http://www.speckavali.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "4F",
+    "counsellingCode": "SRVT",
+    "collegeName": "Sri Raghavendra Institute of Science and Technology",
+    "URL": "http://www.srist.org",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "9P",
+    "counsellingCode": "SUNP",
+    "collegeName": "Sun Institute of Pharmaceutical Education and Research Kakupalli Nellore",
+    "URL": "http://www.sunpharmacy.co.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "9N",
+    "counsellingCode": "SCPN",
+    "collegeName": "Swathi College of Pharmacy",
+    "URL": "http://www.swathicollegeofpharmacy.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "Q3",
+    "counsellingCode": "VDPN",
+    "collegeName": "Vagdevi College of Pharmacy and Research Centre",
+    "URL": "http://www.vagdeviedu.com",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "4N",
+    "counsellingCode": "VCKV",
+    "collegeName": "Visvodaya Engineering College",
+    "URL": "http://www.veckavali.in",
+    "district": "Nellore"
+  },
+  {
+    "collegeCode": "8Q",
+    "counsellingCode": "ANMB",
+    "collegeName": "Acharya college of Engineering",
+    "URL": "http://www.acharyaedu.com",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "2F",
+    "counsellingCode": "ABIT",
+    "collegeName": "Akshaya Bharathi Institute of Technology",
+    "URL": "http://www.abit.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "M7",
+    "counsellingCode": "ANCP",
+    "collegeName": "Annamacharya College of Pharmacy",
+    "URL": "http://www.ancpap.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HM",
+    "counsellingCode": "AITK",
+    "collegeName": "Annamacharya Institute of Technology and Sciences",
+    "URL": "http://www.aitskadapa.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "70",
+    "counsellingCode": "AITS",
+    "collegeName": "Annamacharya Institute of Technology and Sciences Autonomous",
+    "URL": "http://www.aitsrajampet.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "5P",
+    "counsellingCode": "ANMM",
+    "collegeName": "Annamacharya P.G. College of Management Studies",
+    "URL": "http://www.aitsrajampetpgms.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "5N",
+    "counsellingCode": "–",
+    "collegeName": "Annamacharya P.G.College of Computer Studies",
+    "URL": "http://www.aitsrajampetpgcs.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "9R",
+    "counsellingCode": "BIMK",
+    "collegeName": "Balaji Institute of I.T and Management",
+    "URL": "http://www.bimkadapa.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "8R",
+    "counsellingCode": "BITP",
+    "collegeName": "Balaji Institute of Technology and Science",
+    "URL": "http://www.bitspdtr.com",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "5K",
+    "counsellingCode": "BCTW",
+    "collegeName": "Bharath College of Engineering and Technology for Women",
+    "URL": "http://www.bcetfw.com",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "2P",
+    "counsellingCode": "CBIT",
+    "collegeName": "Chaitanya Bharathi Institute of Technology",
+    "URL": "http://www.cbit.edu.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HQ",
+    "counsellingCode": "YSET",
+    "collegeName": "Dr.Y.S.Rajasekhar Reddy Institute of Engineering and Technology",
+    "URL": "http://www.drysrengg.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "FN",
+    "counsellingCode": "FIPK",
+    "collegeName": "Fathima Institute of Pharmacy",
+    "URL": "http://www.fathimainstituteofpharmacy.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "5M",
+    "counsellingCode": "FITM",
+    "collegeName": "Fathima Institute of Technology and Management",
+    "URL": "http://www.fitam.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "3A",
+    "counsellingCode": "GLBC",
+    "collegeName": "Global College of Engineering and Technology",
+    "URL": "www.glbc.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "JK",
+    "counsellingCode": "GLBL",
+    "collegeName": "Global Institute of Technology and Management Sciences",
+    "URL": "http://www.gitamskadapa.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "8U",
+    "counsellingCode": "GTMW",
+    "collegeName": "Goutami Institute of Technology and Management for Women",
+    "URL": "www.gitamw.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HK",
+    "counsellingCode": "KSRM",
+    "collegeName": "K.S.R.M College of Management Studies",
+    "URL": "http://www.ksrmmba.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HL",
+    "counsellingCode": "KSRM",
+    "collegeName": "K.S.R.M. College of Computer Studies",
+    "URL": "http://www.ksrmmca.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "9Y",
+    "counsellingCode": "KSRM",
+    "collegeName": "K.S.R.M. College of Engineering",
+    "URL": "http://ksrmce.ac.in/",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "3H",
+    "counsellingCode": "KLMW",
+    "collegeName": "Kandula Lakshumma Memorial College of Engineering for Women",
+    "URL": "http://www.klmcew.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "BC",
+    "counsellingCode": "KORK",
+    "collegeName": "Kandula Obula Reddy Memorial College of Engineering",
+    "URL": "www.kormce.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "9T",
+    "counsellingCode": "NA",
+    "collegeName": "Madhura Sai Institute of IT and Management",
+    "URL": "http://www.msimpdtr.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "72",
+    "counsellingCode": "MDJM",
+    "collegeName": "Madina Engineering College",
+    "URL": "http://www.madinaengg.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "3M",
+    "counsellingCode": "mktw",
+    "collegeName": "Modugula Kalavathamma Institute of Technology for Women",
+    "URL": "http://www.mkitwrjpt.com",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "8Y",
+    "counsellingCode": "NIST",
+    "collegeName": "Narayanadri Institute of Science and Technology",
+    "URL": "www.nistedu.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "G9",
+    "counsellingCode": "NICP",
+    "collegeName": "Nirmala College of Pharmacy",
+    "URL": "http://www.nicpkdp.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "44",
+    "counsellingCode": "PRMP",
+    "collegeName": "P.Rami Reddy Memorial College of Pharmacy",
+    "URL": "www.prrmcp.edu.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "3Q",
+    "counsellingCode": "RVPW",
+    "collegeName": "Rajoli Veera Reddy Padmaja Engineering College for Women",
+    "URL": "http://www.rvpecw.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "JR",
+    "counsellingCode": "SSKI",
+    "collegeName": "S.S.K INSTITUTE OF BUSINESS MANAGEMENT",
+    "URL": "www.sskibm.com",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "JL",
+    "counsellingCode": "SVPK",
+    "collegeName": "S.V. PG College",
+    "URL": "www.svcolleges.edu.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HE",
+    "counsellingCode": "NA",
+    "collegeName": "Sharada Post Graduate Institute of Research and Technological Sciences",
+    "URL": "http://www.spirts.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HH",
+    "counsellingCode": "SDSK",
+    "collegeName": "Sri Datta Sai College of MCA",
+    "URL": "http://www.sdskadapa.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "JZ",
+    "counsellingCode": "SDSB",
+    "collegeName": "Sri Datta Sai School of Business",
+    "URL": "http://www.sdsbschool.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "4T",
+    "counsellingCode": "slvp",
+    "collegeName": "Sri Lakshmi Venkateswara Institute of Pharmaceutical Sciences",
+    "URL": "http://www.slvpspdtr.com",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HD",
+    "counsellingCode": "SSBP",
+    "collegeName": "Sri Sai College of IT and Management",
+    "URL": "www.scitkadapa.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "F7",
+    "counsellingCode": "SRSR",
+    "collegeName": "SRI SAI INSTITUTE OF TECHNOLOGY AND SCIENCE",
+    "URL": "http://www.ssits.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "KH",
+    "counsellingCode": "SVCK",
+    "collegeName": "Sri Venkateswara College of Engineering",
+    "URL": "www.svcekadapa.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "BG",
+    "counsellingCode": "SVIK",
+    "collegeName": "Sri Venkateswara Institute of Science and Technology",
+    "URL": "http://www.svistkadapa.org",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "DC",
+    "counsellingCode": "SIPP",
+    "collegeName": "Srinivasa Institute of Pharmaceutical Sciences",
+    "URL": "http://www.sipp.co.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "9H",
+    "counsellingCode": "SRTS",
+    "collegeName": "Srinivasa Institute of Technology and Science",
+    "URL": "http://www.sitskadapa.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "L2",
+    "counsellingCode": "VITS",
+    "collegeName": "Vaagdevi Institute of Technology and Science",
+    "URL": "http://www.vitspdtr.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "9W",
+    "counsellingCode": "–",
+    "collegeName": "Vasavi Institute of Management and Computer Sciences",
+    "URL": "www.vimcsciences.com",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "4U",
+    "counsellingCode": "VSPP",
+    "collegeName": "Vasavi Institute of Pharmaceutical Sciences",
+    "URL": "http://www.vipsciences.ac.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "9K",
+    "counsellingCode": "VBIT",
+    "collegeName": "Vignana Bharathi Institute of Technology",
+    "URL": "http://www.vbit.edu.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "HJ",
+    "counsellingCode": "VIBM",
+    "collegeName": "VIKAS INSTITUTE OF BUSINESS MANAGEMENT",
+    "URL": "http://www.vibm.org.in",
+    "district": "Y.S.R"
+  },
+  {
+    "collegeCode": "8P",
+    "counsellingCode": "ACEM",
+    "collegeName": "Aditya College of Engineering",
+    "URL": "http://www.acem.ac.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "AK",
+    "counsellingCode": "AITT",
+    "collegeName": "Annamacharya Institute of Technology and Sciences",
+    "URL": "http://www.aits-tpt.edu.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "KD",
+    "counsellingCode": "ASCP",
+    "collegeName": "Arpitha Srinivas College of Pharmacy",
+    "URL": "http://www.arpithasrinivas.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "P1",
+    "counsellingCode": "CHDL",
+    "collegeName": "Chadalawada Ramanamma Engineering College",
+    "URL": "http://www.crectirupati.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "2Q",
+    "counsellingCode": "CVSE",
+    "collegeName": "Chadalawada Venkata Subbaiah College of Engineering",
+    "URL": "www.cvcetirupati.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "9M",
+    "counsellingCode": "GVIC",
+    "collegeName": "Golden Valley Integrated Campus",
+    "URL": "http://www.gvic.ac.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "3D",
+    "counsellingCode": "JBWC",
+    "collegeName": "J.B.Women s Engineering College",
+    "URL": "http://www.jbcollegestpt.org.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "3F",
+    "counsellingCode": "KKCT",
+    "collegeName": "KKC Institute of Technology and Engineering",
+    "URL": "http://www.kkctech.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "3G",
+    "counsellingCode": "KMMT",
+    "collegeName": "KMM Institute of Technology and Science",
+    "URL": "www.kmmits.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "AF",
+    "counsellingCode": "KTPT",
+    "collegeName": "Krishna Teja Pharmacy College",
+    "URL": "www.krishnatejapharmacycollege.ac.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "F4",
+    "counsellingCode": "KUPM",
+    "collegeName": "Kuppam Engineering College",
+    "URL": "http://www.kec.ac.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "8X",
+    "counsellingCode": "MJRT",
+    "collegeName": "M.J.R. College of Engineering and Technology",
+    "URL": "http://www.mjrcet.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "69",
+    "counsellingCode": "MITS, MITS2",
+    "collegeName": "Madanapalle Institute of Technology and Science",
+    "URL": "https://www.mits.ac.in/",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "HW",
+    "counsellingCode": "MCPM",
+    "collegeName": "Mahathi College of Pharmacy",
+    "URL": "http://www.mahathicollegeofpharmacy.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "KC",
+    "counsellingCode": "not applicable",
+    "collegeName": "MJR Institute of Business Management",
+    "URL": "www.mjribm.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "HR",
+    "counsellingCode": "MTIE",
+    "collegeName": "Mother Theresa Institute of Engineering and Technology",
+    "URL": "http://www.mtitech.edu.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "3P",
+    "counsellingCode": "PDIT",
+    "collegeName": "Priyadarshini Institute of Technology",
+    "URL": "www.pdittpt.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "HT",
+    "counsellingCode": "SSEC",
+    "collegeName": "Sai Sakthi Engineering College",
+    "URL": "http://www.saisakthi.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "CP",
+    "counsellingCode": "SESP",
+    "collegeName": "Seshachala College of Pharmacy",
+    "URL": "http://www.scpptr.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "JM",
+    "counsellingCode": "SESE",
+    "collegeName": "Seshachala Institute of Engineering and Technology",
+    "URL": "http://www.seshachala.edu.in/",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "3U",
+    "counsellingCode": "SEST",
+    "collegeName": "Seshachala Institute of Technology",
+    "URL": "http://www.seshachala.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "JA",
+    "counsellingCode": "",
+    "collegeName": "Seshachala Venkata Subbaiah PG College",
+    "URL": "http://www.svspgcollege.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "CQ",
+    "counsellingCode": "SHCP",
+    "collegeName": "Seven Hills College of Pharmacy",
+    "URL": "http://www.shcptirupati.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "4A",
+    "counsellingCode": "SHRE",
+    "collegeName": "Shree Institute of Technical Education",
+    "URL": "http://www.site.edu.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "JE",
+    "counsellingCode": "SRES",
+    "collegeName": "Shree Rama Educational Society Group of Institutions",
+    "URL": "http://www.sreerama.ac.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "9L",
+    "counsellingCode": "SEAT",
+    "collegeName": "Siddartha Educational Academy Group of Institutions Integrated Campus",
+    "URL": "www.siddarthaedu.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "4E",
+    "counsellingCode": "SIST",
+    "collegeName": "Siddartha Institute of Science and Technology",
+    "URL": "http://www.sistk.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "F6",
+    "counsellingCode": "SDTN",
+    "collegeName": "Siddharth Institute of Engineering and Technology",
+    "URL": "www.sietk.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "W5",
+    "counsellingCode": "SVTM",
+    "collegeName": "Sir Vishveshwaraiah Institute of Science and Technology",
+    "URL": "http://www.svtm.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "4C",
+    "counsellingCode": "SRET",
+    "collegeName": "Sree Rama Engineering College",
+    "URL": "http://www.sreerama.ac.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "P9",
+    "counsellingCode": "VNCP",
+    "collegeName": "Sree Vidyanikethan College of Pharmacy",
+    "URL": "http://www.vidyanikethan.edu",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "12",
+    "counsellingCode": "SVNE",
+    "collegeName": "Sree Vidyanikethan Engineering College. Autonomous",
+    "URL": "http://www.vidyanikethan.edu",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "75",
+    "counsellingCode": "SSCC",
+    "collegeName": "Sreenivasa Institute of Technology and Management Studies AUTONOMOUS",
+    "URL": "http://www.sitams.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "38",
+    "counsellingCode": "SKHE",
+    "collegeName": "Sri Kalahastheeswara Institute of Technology",
+    "URL": "http://www.skit.edu.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "Q0",
+    "counsellingCode": "SKCP",
+    "collegeName": "Sri Krishna Chaithanya College of Pharmacy",
+    "URL": "http://www.skcpmpl.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "Q1",
+    "counsellingCode": "LNCP",
+    "collegeName": "Sri Lakshmi Narasimha College of Pharmacy",
+    "URL": "www.slncpharmacy.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "42",
+    "counsellingCode": "SPSP",
+    "collegeName": "Sri Padmavathi School of Pharmacy",
+    "URL": "www.spsp.ac.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "G0",
+    "counsellingCode": "SVPP",
+    "collegeName": "Sri Venkatesa Perumal College of Engineering and Technology",
+    "URL": "http://www.svpcet.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "JG",
+    "counsellingCode": "NA",
+    "collegeName": "Sri Venkateswara College of Computer Sciences",
+    "URL": "http://www.svccsmca.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "BF",
+    "counsellingCode": "SVCE",
+    "collegeName": "Sri Venkateswara College of Engineering",
+    "URL": "http://www.svcolleges.edu.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "78",
+    "counsellingCode": "SVCT",
+    "collegeName": "Sri Venkateswara College of Engineering and Technology Autonomous",
+    "URL": "http://www.svcetedu.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "GT",
+    "counsellingCode": "SVCP",
+    "collegeName": "Sri Venkateswara College of Pharmacy",
+    "URL": "http://www.svcop.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "9E",
+    "counsellingCode": "SVEW",
+    "collegeName": "Sri Venkateswara Engineering College for Women",
+    "URL": "http://www.svew.edu.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "4J",
+    "counsellingCode": "SWTS",
+    "collegeName": "Swetha Institute of Technology and Science",
+    "URL": "http://www.swethaengg.org",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "BP",
+    "counsellingCode": "VITT",
+    "collegeName": "Vaishnavi Institute of Technology",
+    "URL": "http://www.vitt.edu.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "9J",
+    "counsellingCode": "VTTW",
+    "collegeName": "Vaishnavi Institute of Technology for women",
+    "URL": "http://www.vitwomen.com",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "4M",
+    "counsellingCode": "VEMU",
+    "collegeName": "Vemu Institute of Technology",
+    "URL": "http://www.vemu.co.in",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "JB",
+    "counsellingCode": "NIL",
+    "collegeName": "Vignanasudha Institute of Management and Technology",
+    "URL": "www.vimat.co",
+    "district": "Chittoor"
+  },
+  {
+    "collegeCode": "4P",
+    "counsellingCode": "YITS",
+    "collegeName": "Yogananda Institute of Technology and Science",
+    "URL": "http://www.yitsdmr.com",
+    "district": "Chittoor"
+  }
+]
