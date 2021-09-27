@@ -34,11 +34,13 @@ router.get('/new/:page', async (req, res) => {
     res.json(err)
   }
 })
-router.get('/all/:page', async (req, res) => {
+router.get('/all/:page/:sortByCount', async (req, res) => {
   try {
     const results = {
-      count: await Analytics.find().countDocuments(),
-      students: await Analytics.find({}, '-_id -__v').sort({ latest: -1 }).limit(req.params.page * 50),
+      rowsCount: await Analytics.find().countDocuments(),
+      students: req.params.sortByCount ==1 ?
+        await Analytics.find({}, '-_id -__v').sort({ count: -1 }).limit(req.params.page * 50):
+        await Analytics.find({}, '-_id -__v').sort({ latest: -1 }).limit(req.params.page * 50)
     }
     //create obj to store stats
     searchCount = {}
@@ -55,11 +57,17 @@ router.get('/all/:page', async (req, res) => {
           * 60 * 1000).toUTCString()
       delete results.students[i]._doc['latest']
     }
-    const sendRes = { count: results.count, colleges: searchCount, students: results.students }
+    //sum total count in all records
+    let totalCount = 0
+    results.students.forEach(stud => {
+      totalCount += stud.count
+    });
+    const sendRes = { totalCount: totalCount, rowsCount: results.rowsCount, colleges: searchCount, students: results.students }
     delete results
     // console.log(results)
     res.json(sendRes)
   } catch (err) {
+    console.error(err)
     res.json(err)
   }
 })
