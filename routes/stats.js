@@ -13,12 +13,12 @@ router.get('/public', async (req, res) => {
   try {
     const results = {
       count: await Result.find().countDocuments(),
-      students: await Result.find({}, '-_id htn addedTime').sort({ addedTime: -1 }).limit(req.params.page * 50),
+      students: await Result.find({}, '-_id htn addedTime').sort({ addedTime: 1 }).limit(req.params.page * 50),
     }
     // console.log(results.students)
     //create obj to store stats
     searchCount = {}
-    searchDates = []
+    searchDates = {}
     for (let i = 0; i < results.students.length; i++) {
       let date = new Date(results.students[i].addedTime).getDate() + " " +
         monthNames[new Date(results.students[i].addedTime).getMonth()]
@@ -46,12 +46,12 @@ router.get('/public', async (req, res) => {
           topColleges.push(college)
       });
     }
-    console.log('topColleges')
-
-    const sendRes = { count: results.count, colleges: searchCount, topColleges, searchDates }
-    delete results
+    const sendRes = {
+      count: results.count, colleges: searchCount,
+      topColleges,searchDates
+    }
+    // delete results
     console.log(sendRes)
-    // console.log(searchDates)
     res.json(sendRes)
   } catch (err) {
     console.log(err)
