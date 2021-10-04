@@ -5,39 +5,55 @@ const Feedback = require('../models/Feedback')
 const Share = require('../models/Share')
 const Analytics = require('../models/Analytics')
 
+const { monthNames } = require('../utils/utils')
+
 const collegesInfo = require('../collegeInfo.json')
 
 router.get('/public', async (req, res) => {
   try {
     const results = {
       count: await Result.find().countDocuments(),
-      students: await Result.find({}, '-_id htn').sort({ addedTime: -1 }).limit(req.params.page * 50),
+      students: await Result.find({}, '-_id htn addedTime').sort({ addedTime: -1 }).limit(req.params.page * 50),
     }
     // console.log(results.students)
     //create obj to store stats
     searchCount = {}
+    searchDates = []
     for (let i = 0; i < results.students.length; i++) {
+      let date = new Date(results.students[i].addedTime).getDate() + " " +
+        monthNames[new Date(results.students[i].addedTime).getMonth() + 1]
+
+      searchDates.forEach((ele,index) => {
+        if (ele.date ==  date ) {
+          searchDates[index].count++
+        }
+        else {
+          searchDates.push({ date: date, count: 1 })
+        }
+      });
+
       //count searchCount for each college
       if (!Object.keys(searchCount).includes((results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()))
-      searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()] = 1
+        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()] = 1
       else
-      searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()]++
+        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()]++
     }
     let arr = Object.entries(searchCount)
-    arr.sort(([a,b],[c,d])=>d-b)
+    arr.sort(([a, b], [c, d]) => d - b)
     const topColleges = []
     for (let i = 0; i < 3; i++) {
-        //loop through entire json to fine college name for code
-        collegesInfo.forEach(college => {
-          if(college.collegeCode.toLowerCase() == arr[i][0].toLowerCase())
+      //loop through entire json to fine college name for code
+      collegesInfo.forEach(college => {
+        if (college.collegeCode.toLowerCase() == arr[i][0].toLowerCase())
           topColleges.push(college)
-        });
+      });
     }
     console.log('topColleges')
 
-    const sendRes = { count: results.count, colleges: searchCount,topColleges}
+    const sendRes = { count: results.count, colleges: searchCount, topColleges }
     delete results
     console.log(sendRes)
+    console.log(searchDates)
     res.json(sendRes)
   } catch (err) {
     console.log(err)
@@ -78,8 +94,8 @@ router.get('/all/:page/:sortByCount', async (req, res) => {
   try {
     const results = {
       rowsCount: await Analytics.find().countDocuments(),
-      students: req.params.sortByCount ==1 ?
-        await Analytics.find({}, '-_id -__v').sort({ count: -1 }).limit(req.params.page * 50):
+      students: req.params.sortByCount == 1 ?
+        await Analytics.find({}, '-_id -__v').sort({ count: -1 }).limit(req.params.page * 50) :
         await Analytics.find({}, '-_id -__v').sort({ latest: -1 }).limit(req.params.page * 50)
     }
     //create obj to store stats
