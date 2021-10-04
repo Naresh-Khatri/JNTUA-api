@@ -21,22 +21,20 @@ router.get('/public', async (req, res) => {
     searchDates = []
     for (let i = 0; i < results.students.length; i++) {
       let date = new Date(results.students[i].addedTime).getDate() + " " +
-        monthNames[new Date(results.students[i].addedTime).getMonth() + 1]
+        monthNames[new Date(results.students[i].addedTime).getMonth()]
 
-      searchDates.forEach((ele,index) => {
-        if (ele.date ==  date ) {
-          searchDates[index].count++
-        }
-        else {
-          searchDates.push({ date: date, count: 1 })
-        }
-      });
+      if (!Object.keys(searchDates).includes(date))
+        searchDates[date] = 1
+      else
+        searchDates[date]++
 
       //count searchCount for each college
-      if (!Object.keys(searchCount).includes((results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()))
-        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()] = 1
+      const collegeCode = (results.students[i]._doc.htn[2] +
+        results.students[i]._doc.htn[3]).toLowerCase()
+      if (!Object.keys(searchCount).includes(collegeCode))
+        searchCount[collegeCode] = 1
       else
-        searchCount[(results.students[i]._doc.htn[2] + results.students[i]._doc.htn[3]).toLowerCase()]++
+        searchCount[collegeCode]++
     }
     let arr = Object.entries(searchCount)
     arr.sort(([a, b], [c, d]) => d - b)
@@ -50,10 +48,10 @@ router.get('/public', async (req, res) => {
     }
     console.log('topColleges')
 
-    const sendRes = { count: results.count, colleges: searchCount, topColleges }
+    const sendRes = { count: results.count, colleges: searchCount, topColleges, searchDates }
     delete results
     console.log(sendRes)
-    console.log(searchDates)
+    // console.log(searchDates)
     res.json(sendRes)
   } catch (err) {
     console.log(err)
