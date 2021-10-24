@@ -1,3 +1,4 @@
+const JSSoup = require('jssoup').default
 const axios = require('axios')
 const HtmlTableToJson = require('html-table-to-json');
 
@@ -178,10 +179,50 @@ function getResultFromDB(resultID, htn) {
     })
 }
 
+function getResultIDDetails(resultID) {
+    return new Promise((resolve, reject) => {
+        axios.get('https://jntuaresults.ac.in/index.php')
+            .then(res => {
+                const soup = new JSSoup(res.data)
+                //get content of 2nd table
+                //jntua is fucking insane for adding the first table for
+                //no fucking reason, else would have used find() instead
+                const table = soup.findAll('table')[1]
+                const tr = table.findAll('tr')
+                const obj = {}
+                for (let i = 1; i < 400; i++) {
+                    if (tr[i].find('a').attrs.href.includes(resultID)){
+                        const str = tr[i].find('a').nextElement._text
+                        var regulationRegExp = /\((R[^)]+)\)/;
+                        const splitString = str.toUpperCase().split(' ')
+
+                        obj['title'] = str
+                        obj['reg'] = !!regulationRegExp.exec(str) ? regulationRegExp.exec(str)[1] : null
+                        obj['year'] = splitString[splitString.indexOf('YEAR') - 1] || null
+                        obj['sem'] = splitString[splitString.indexOf('SEMESTER') - 1] == 'III' ? "I" :
+                            splitString[splitString.indexOf('SEMESTER') - 1] == 'IV' ? "II" :
+                                splitString[splitString.indexOf('SEMESTER') - 1] || null
+                        obj['course'] = splitString[0]
+                        obj['resultID'] = parseInt(resultID)
+                        console.log(tr[i].find('a').nextElement._text, tr[i].find('a').attrs.href)
+                        console.log(obj)
+                    }
+                    // resultRows.push(getResultInfoObj(tr[i].find('a').nextElement._text, tr[i].find('a').attrs.href))
+                }
+                resolve(obj)
+            })
+            .catch(err => {
+                console.log(err)
+            }).finally(() => {
+                // console.log(JSON.stringify(resultsObj, null, 2));
+            })
+    })
+}
+
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
 module.exports = {
-    getToken, parseInt, convert2obj, getSGPA, getFailedCount, getResultFromJNTU, getResultFromDB,
-    monthNames
+    getToken, parseInt, convert2obj, getSGPA, getFailedCount, getResultFromJNTU,
+    getResultFromDB, getResultIDDetails, monthNames
 }

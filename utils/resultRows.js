@@ -16,7 +16,7 @@ const AllResultsRows = function () {
                 const table = soup.findAll('table')[1]
                 const tr = table.findAll('tr')
                 const resultRows = []
-                resultsObj={}
+                resultsObj = {}
                 for (let i = 1; i < 400; i++) {
                     resultRows.push(getResultInfoObj(tr[i].find('a').nextElement._text, tr[i].find('a').attrs.href))
                 }
@@ -54,7 +54,7 @@ const AllResultsRows = function () {
                     if (resultsObj[reg][course][year][sem]) {
                         resultsObj[reg][course][year][sem].push({ title, resultID })
                     } else {
-                        resultsObj[reg][course][year][sem] = [{ title, resultID }] 
+                        resultsObj[reg][course][year][sem] = [{ title, resultID }]
                     }
                 } else {
                     resultsObj[reg][course][year] = { [sem]: [{ title, resultID }] }

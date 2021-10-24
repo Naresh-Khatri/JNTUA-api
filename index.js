@@ -9,7 +9,7 @@ const Feedback = require('./models/Feedback')
 const Share = require('./models/Share')
 const Analytics = require('./models/Analytics')
 
-const { getToken, convert2obj } = require('./utils/utils.js')
+const { getToken, convert2obj, getResultIDDetails } = require('./utils/utils.js')
 const { AllResultsRows } = require('./utils/resultRows')
 
 
@@ -47,6 +47,9 @@ app.get('/semResults/:resultID/:prefix/:start/:end', async (req, res) => {
 })
 app.get('/releasedResults', async (req, res) => {
   res.json(await AllResultsRows())
+})
+app.get('/resultIDDetails/:resID', async(req, res) => {
+  res.json(await getResultIDDetails(req.params.resID))
 })
 app.post('/feedback', async (req, res) => {
   console.log(req.body)
@@ -180,10 +183,7 @@ function getResultFromJNTU(resultID, htn) {
           //removing <b> tag
           return reject(res.data.replace(/<\/?[^>]+(>|$)/g, ""))
         }
-        let tableHTML = ''
-        for (let i = 0; i < res.data.length; i++) {
-          tableHTML += res.data[i]
-        }
+        let tableHTML = res.data
         //jntua is a fucking peice of shit for not adding these closings
         //such a pain 
         tableHTML += '</th></tr></table>'
@@ -228,7 +228,7 @@ function addAnalytics(resultID, htn) {
         const anal = new Analytics({
           htn,
           resultID,
-          count: 1,latest: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
+          count: 1, latest: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
         })
         anal.save()
       }
