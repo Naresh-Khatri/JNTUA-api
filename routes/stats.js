@@ -51,7 +51,7 @@ router.get('/public', async (req, res) => {
       topColleges,searchDates
     }
     // delete results
-    console.log(sendRes)
+    // console.log(sendRes)
     res.json(sendRes)
   } catch (err) {
     console.log(err)
