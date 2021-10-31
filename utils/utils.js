@@ -204,8 +204,8 @@ function getResultIDDetails(resultID) {
                                 splitString[splitString.indexOf('SEMESTER') - 1] || null
                         obj['course'] = splitString[0]
                         obj['resultID'] = parseInt(resultID)
-                        console.log(tr[i].find('a').nextElement._text, tr[i].find('a').attrs.href)
-                        console.log(obj)
+                        // console.log(tr[i].find('a').nextElement._text, tr[i].find('a').attrs.href)
+                        // console.log(obj)
                     }
                     // resultRows.push(getResultInfoObj(tr[i].find('a').nextElement._text, tr[i].find('a').attrs.href))
                 }
@@ -218,11 +218,17 @@ function getResultIDDetails(resultID) {
             })
     })
 }
-
+//gets all results of stud of a sem
+function getStudentRes(data){
+    return new Promise((resolve, reject)=>{
+        console.log(data)
+        resolve('ok')
+    });
+}
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
 module.exports = {
     getToken, parseInt, convert2obj, getSGPA, getFailedCount, getResultFromJNTU,
-    getResultFromDB, getResultIDDetails, monthNames
+    getResultFromDB, getStudentRes, getResultIDDetails, monthNames
 }
