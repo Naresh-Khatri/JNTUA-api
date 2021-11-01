@@ -8,16 +8,15 @@ const Result = require('./models/Result')
 const Feedback = require('./models/Feedback')
 const Share = require('./models/Share')
 const Analytics = require('./models/Analytics')
-
-const { getToken, convert2obj, getResultIDDetails, getStudentRes } = require('./utils/utils.js')
-const { AllResultsRows } = require('./utils/resultRows')
-
-
-const app = express()
 const stats = require('./routes/stats')
+
+const { getToken, convert2obj, getResultIDDetails,
+  getResultFull } = require('./utils/utils.js')
 const { updateReleasedResJSON, getReleasedResJSON } = require('./utils/releasedResManager')
 
+const app = express()
 const PORT = process.env.PORT || 3000
+
 //allow cors
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
@@ -34,7 +33,7 @@ app.use('/stats', stats)
 updateReleasedResJSON()
 setInterval(() => {
   updateReleasedResJSON()
-},60*1000)
+}, 60 * 1000)
 
 //get specific result
 app.get('/singleResult/:resultID/:htn', async (req, res) => {
@@ -48,7 +47,7 @@ app.get('/singleResult/:resultID/:htn', async (req, res) => {
 // get all (regular + supply) res of htn
 app.get('/singleResultv2/:htn/:reg/:course/:year/:sem', async (req, res) => {
   try {
-    res.json(await getStudentRes(req.params))
+    res.json(await getResultFull(req.params))
   }
   catch (err) {
     res.status(404).json({ message: err })
@@ -66,7 +65,7 @@ app.get('/semResults/:resultID/:prefix/:start/:end', async (req, res) => {
 app.get('/releasedResults', async (req, res) => {
   res.json(await getReleasedResJSON())
 })
-app.get('/resultIDDetails/:resID', async(req, res) => {
+app.get('/resultIDDetails/:resID', async (req, res) => {
   res.json(await getResultIDDetails(req.params.resID))
 })
 app.post('/feedback', async (req, res) => {

@@ -4,7 +4,7 @@ const axios = require('axios')
 
 let resultsObj = {}
 
-const AllResultsRows = function () {
+const getAllResultsRows = function () {
     return new Promise((resolve, reject) => {
         axios.get('https://jntuaresults.ac.in/index.php')
             .then(res => {
@@ -96,4 +96,4 @@ function getResultInfoObj(str, resultID) {
     return obj
 }
 
-module.exports = { AllResultsRows }
+module.exports = { getAllResultsRows }

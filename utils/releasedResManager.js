@@ -1,10 +1,19 @@
 const fs = require('fs')
-const { AllResultsRows } = require('./resultRows')
+const { getAllResultsRows } = require('./resultRows')
 
 async function updateReleasedResJSON() {
-    fs.writeFile('./utils/releasedRes.json', JSON.stringify(await AllResultsRows()), () => {
-        console.log('done')
-    })
+    try {
+
+        let rows = await getAllResultsRows()
+
+        fs.writeFile('./utils/releasedRes.json',
+            JSON.stringify(rows), () => {
+                console.log('JSON updated!')
+            })
+    }catch(err){
+        console.error('Cannot get from jntua 😢')
+    }
+    
 }
 async function getReleasedResJSON() {
     return new Promise((resolve, reject) => {
