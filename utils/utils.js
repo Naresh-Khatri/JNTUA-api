@@ -1,6 +1,9 @@
+const fs = require('fs')
 const JSSoup = require('jssoup').default
 const axios = require('axios')
 const HtmlTableToJson = require('html-table-to-json');
+const Result = require('../models/Result')
+const FullResult = require('../models/FullResult')
 
 function getToken() {
     return new Promise((resolve, reject) => {
@@ -191,7 +194,7 @@ function getResultIDDetails(resultID) {
                 const tr = table.findAll('tr')
                 const obj = {}
                 for (let i = 1; i < 400; i++) {
-                    if (tr[i].find('a').attrs.href.includes(resultID)){
+                    if (tr[i].find('a').attrs.href.includes(resultID)) {
                         const str = tr[i].find('a').nextElement._text
                         var regulationRegExp = /\((R[^)]+)\)/;
                         const splitString = str.toUpperCase().split(' ')
@@ -218,11 +221,45 @@ function getResultIDDetails(resultID) {
             })
     })
 }
+
 //gets all results of stud of a sem
-function getStudentRes(data){
-    return new Promise((resolve, reject)=>{
-        console.log(data)
-        resolve('ok')
+function getResultFull(data) {
+    return new Promise((resolve, reject) => {
+
+        fs.readFile('./utils/releasedRes.json', async (err, res) => {
+            if (err) {
+                throw err;
+            }
+            try {
+                //capilatize everything!
+                const reg = data.reg.toUpperCase()
+                const course = data.course.toUpperCase()
+                const year = data.year.toUpperCase()
+                const sem = data.sem.toUpperCase()
+                // console.log(reg, course, year, sem)
+                const rows = JSON.parse(res)[reg][course][year][sem]
+                const resArray = []
+                const promises = []
+                if (rows) {
+                    rows.reverse()
+                    rows.map(async (row) => {
+                        promises.push(getResultFromDB(row.resultID, res.htn))
+                    })
+                    Promise.all(promises).then(res=>console.log(res))
+                    console.log(promises)
+                    resolve(promises)
+
+                    rows.map(row => console.log(row.resultID))
+
+                }
+                // resolve(JSON.parse(res)[reg][course][year][sem])
+            }
+            catch (err) {
+                console.log(err)
+                reject('sigh! 😔 no results')
+            }
+
+        })
     });
 }
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -230,5 +267,5 @@ const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep
 
 module.exports = {
     getToken, parseInt, convert2obj, getSGPA, getFailedCount, getResultFromJNTU,
-    getResultFromDB, getStudentRes, getResultIDDetails, monthNames
+    getResultFromDB, getResultFull, getResultIDDetails, monthNames
 }
