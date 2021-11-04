@@ -48,7 +48,7 @@ router.get('/public', async (req, res) => {
     }
     const sendRes = {
       count: results.count, colleges: searchCount,
-      topColleges,searchDates
+      topColleges, searchDates
     }
     // delete results
     // console.log(sendRes)

@@ -11,7 +11,7 @@ const Analytics = require('./models/Analytics')
 const stats = require('./routes/stats')
 
 const { getToken, convert2obj, getResultIDDetails,
-  getResultFull } = require('./utils/utils.js')
+  getFullResult, getFullBatchResults, addAnalytics } = require('./utils/utils.js')
 const { updateReleasedResJSON, getReleasedResJSON } = require('./utils/releasedResManager')
 
 const app = express()
@@ -47,7 +47,7 @@ app.get('/singleResult/:resultID/:htn', async (req, res) => {
 // get all (regular + supply) res of htn
 app.get('/singleResultv2/:htn/:reg/:course/:year/:sem', async (req, res) => {
   try {
-    res.json(await getResultFull(req.params))
+    res.send(await getFullResult(Object.assign(req.params, { token: token })))
   }
   catch (err) {
     res.status(404).json({ message: err })
@@ -55,12 +55,20 @@ app.get('/singleResultv2/:htn/:reg/:course/:year/:sem', async (req, res) => {
 })
 
 
-app.get('/semResults/:resultID/:prefix/:start/:end', async (req, res) => {
-  res.json(await getSemResult(req.params.resultID,
+app.get('/batchResult/:resultID/:prefix/:start/:end', async (req, res) => {
+  res.json(await getBatchResult(req.params.resultID,
     req.params.prefix,
     req.params.start,
     req.params.end))
   // res.json(req.body)
+})
+app.get('/batchResultsv2/:rollPrefix/:start/:end/:reg/:course/:year/:sem', async (req, res) => {
+  const results = await getFullBatchResults(Object.assign(req.params, { token: token }))
+  // res.json(await getFullBatchResult(req.params.resultID,
+  //   req.params.prefix,
+  //   req.params.start,
+  //   req.params.end))
+  res.json(results)
 })
 app.get('/releasedResults', async (req, res) => {
   res.json(await getReleasedResJSON())
@@ -115,7 +123,27 @@ let token = 0
 //get token initially
 getToken().then(res => token = res)
 
-async function getSemResult(resultID, prefix, start, end) {
+async function getBatchResult(resultID, prefix, start, end) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      //check if result exist in db first 
+      let resultList = []
+      for (let i = start; i < end; i++) {
+        try {
+          resultList.push(await getResultFromDB(resultID, prefix +
+            (i < 10 ? `0${i}` : i)))
+          //console.log(resultList)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      resolve(resultList)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+async function getBatchResult(resultID, prefix, start, end) {
   return new Promise(async (resolve, reject) => {
     try {
       //check if result exist in db first 
@@ -200,10 +228,9 @@ function getResultFromJNTU(resultID, htn) {
           //removing <b> tag
           return reject(res.data.replace(/<\/?[^>]+(>|$)/g, ""))
         }
-        let tableHTML = res.data
+        let tableHTML = res.data + '</th></tr></table>'
         //jntua is a fucking peice of shit for not adding these closings
         //such a pain 
-        tableHTML += '</th></tr></table>'
         const resultObj = convert2obj(tableHTML, resultID)
 
         const result = new Result(resultObj)
@@ -223,32 +250,4 @@ function getResultFromJNTU(resultID, htn) {
       })
   })
 
-}
-function addAnalytics(resultID, htn) {
-  Analytics.find({ resultID, htn }, async (err, result) => {
-    if (err) {
-      console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
-    }
-    else {
-      //result exist
-      if (result.length) {
-        Analytics.findOne({ htn, resultID })
-          .then((result, err) => {
-            //increase count, update time and save
-            result.count += 1
-            result.latest = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
-            result.save()
-          })
-      }
-      else {
-        //add new entry with count=1, current time and save
-        const anal = new Analytics({
-          htn,
-          resultID,
-          count: 1, latest: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
-        })
-        anal.save()
-      }
-    }
-  })
 }
