@@ -8,7 +8,7 @@ async function updateReleasedResJSON() {
 
         fs.writeFile('./utils/releasedRes.json',
             JSON.stringify(rows), () => {
-                console.log('JSON updated!')
+                // console.log('JSON updated!')
             })
     }catch(err){
         console.error('Cannot get from jntua 😢')

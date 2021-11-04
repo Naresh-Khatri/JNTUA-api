@@ -414,7 +414,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
     return new Promise(async (resolve, reject) => {
         //add anal
         if (!!examsList) {
-            // examsList.forEach(row=> addAnalytics(row.resultID, htn))
+            examsList.forEach(row=> addAnalytics(row.resultID, htn))
         }
         FullResult.find({
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
