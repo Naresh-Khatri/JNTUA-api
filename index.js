@@ -35,6 +35,15 @@ setInterval(() => {
   updateReleasedResJSON()
 }, 60 * 1000)
 
+//get token initially
+getToken().then(res => {
+  token = res
+  console.log('token updated! -', token)
+})
+setInterval(async () => {
+  token = await getToken()
+}, 60 * 1000)
+
 //get specific result
 app.get('/singleResult/:resultID/:htn', async (req, res) => {
   try {
@@ -119,9 +128,7 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
 })
 
-let token = 0
-//get token initially
-getToken().then(res => token = res)
+
 
 async function getBatchResult(resultID, prefix, start, end) {
   return new Promise(async (resolve, reject) => {

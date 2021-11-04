@@ -323,6 +323,7 @@ function getStudName(resultID, htn, token) {
     })
 }
 function getAttempt(result, htn, token) {
+    console.log('token', token)
     return new Promise(async (resolve, reject) => {
         var config = {
             method: 'get',
