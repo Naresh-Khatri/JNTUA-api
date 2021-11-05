@@ -1,14 +1,19 @@
 const mongoose = require('mongoose')
 const FullResultSchema = mongoose.Schema({
     htn: String,
-    name: String ,
+    name: String,
     sgpa: Number,
-    reg:String,
-    course:String,
-    year:String,
-    sem:String,
+    reg: String,
+    course: String,
+    year: String,
+    sem: String,
     attempts: Array,
-    viewCount:Number,
+    viewCount: Number,
+    lastViewed: {
+        type: Date,
+        default: Date
+    },
+
     // resultID:String,
     // failedCount: Number,
     // subjects: Array,

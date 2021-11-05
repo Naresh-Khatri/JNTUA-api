@@ -415,7 +415,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
     return new Promise(async (resolve, reject) => {
         //add anal
         if (!!examsList) {
-            examsList.forEach(row=> addAnalytics(row.resultID, htn))
+            // examsList.forEach(row=> addAnalytics(row.resultID, htn))
         }
         FullResult.find({
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
@@ -426,6 +426,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
                 return reject(err)
             //res doesnt exist
             if (result.length == 0) {
+            // if (true) {
                 try {
                     // const result = await getResultFromJNTU(resultID, htn)
                     const res = await getFullResultFromJNTU(examsList, htn, token, resInfo)
@@ -441,7 +442,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
             else {
                 FullResult.findOneAndUpdate({
                     $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
-                }, { viewCount: result[0].viewCount + 1 }, { useFindAndModify: false }, (err, docs) => {
+                }, { viewCount: result[0].viewCount + 1, lastViewed: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString() }, { useFindAndModify: false }, (err, docs) => {
                     if (err)
                         console.log(err)
                     else {
