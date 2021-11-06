@@ -315,7 +315,8 @@ function getStudName(resultID, htn, token) {
                 .replace(/&nbsp;|<\/?[^>]+(>|$)|Hall Ticket No :|Student name:/g, '')
                 .split(' ')
             studInfo.shift()
-            resolve(studInfo.join(' '))
+            // console.log(studInfo.join(' '))
+            return resolve(studInfo.join(' '))
         }
         catch (err) {
             reject('some error 😢')
@@ -323,7 +324,7 @@ function getStudName(resultID, htn, token) {
     })
 }
 function getAttempt(result, htn, token) {
-    console.log('token', token)
+    // console.log('token', token)
     return new Promise(async (resolve, reject) => {
         var config = {
             method: 'get',
@@ -350,12 +351,21 @@ function getAttempt(result, htn, token) {
                     console.log(`Invalid htn=${htn} with resid=${result.resultID}`)
                     return resolve({})
                 }
+
+                //get stud name in all attempts
+                let studInfo = res.data.substring(0, res.data.indexOf('<br>'))
+                    .replace(/&nbsp;|<\/?[^>]+(>|$)|Hall Ticket No :|Student name:/g, '')
+                    .split(' ')
+                studInfo.shift()
+                const studName = studInfo.join(' ')
+
                 let tableHTML = res.data + '</th></tr></table>'
+
                 //jntua is a fucking piece of shit for not adding these closing tags
                 //such a pain 
                 const resultObj = getAllAttemptsObj(tableHTML, result)
                 // console.log(resultObj)
-                resolve(resultObj)
+                resolve({ resultObj, studName })
             })
             .catch(err => {
                 console.log(err)
@@ -368,35 +378,48 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
             Promise.all(examsList.map(exam => getAttempt(exam, htn, token)))
                 .then(async res => {
 
-                    // console.log('res', res)
-                    //initialize with resInfo
-                    resObj = resInfo
-                    resObj['viewCount'] = 1
-                    resObj['attempts'] = res
-                    return resObj;
-                })
-                //this then is for below reason
-                .then(async resObj => {
-                    // console.log('init',resObj.htn, resObj.attempts[0].subjects[3])
-
-                    //getStudName returns a promise so we need to wait for it
-                    const studName = await getStudName(examsList[0].resultID, htn, token)
-                    Object.assign(resObj, { name: studName })
-                    const sgpa = getFullSGPA(resObj['attempts'])
-                    Object.assign(resObj, { htn, sgpa })
-                    // console.log('res', resObj.attempts[0].subjects[3])
-                    const fullResult = new FullResult(resObj)
-                    fullResult.save((err, res) => {
-                        if (err)
-                            console.log(err)
-                        else {
-                            console.log(res)
-                            return resObj
+                    //remember the issue when the promise.all was resolving 
+                    //before the getStudName promise was resolved?
+                    // this is a hack to fix it
+                    // we take the first attempt and get the stud name
+                    const attempts = []
+                    let studName = ''
+                    studAbsent = true
+                    for (let i = 0; i < res.length; i++) {
+                        if (res[i].resultObj == undefined) {
+                            attempts.push({})
+                            continue
                         }
-                    })
+                        attempts.push(res[i].resultObj)
+                        studName = res[i].studName
+                        studAbsent = false
+                    }
+
+                    resObj = {}
+                    //initialize with resInfo
+                    Object.assign(resObj, resInfo)
+                    resObj['attempts'] = attempts
+                    if (studAbsent || resObj['attempts'] == undefined) {
+                        // console.log('stud absent')
+                        return resolve({})
+                    }
+                    resObj['name'] = studName
+                    resObj['viewCount'] = 1
+                    resObj['htn'] = htn
+                    const sgpa = getFullSGPA(resObj['attempts'])
+                    resObj['sgpa'] = sgpa
+                    const fullResult = new FullResult(resObj)
+                    fullResult.save()
+                    // (err, res) => {
+                    //     if (err)
+                    //         console.log(err)
+                    //     else {
+                    //         // console.log(res)
+                    //         return resObj
+                    //     }
+                    // })
                     // console.log('resObj', resObj)
                     // console.log('before',resObj.htn, resObj.attempts[0].subjects[3])
-
                     resolve(resObj)
                 })
                 .catch(err => {
@@ -415,7 +438,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
     return new Promise(async (resolve, reject) => {
         //add anal
         if (!!examsList) {
-            examsList.forEach(row=> addAnalytics(row.resultID, htn))
+            examsList.forEach(row => addAnalytics(row.resultID, htn))
         }
         FullResult.find({
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
@@ -446,7 +469,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
                     if (err)
                         console.log(err)
                     else {
-                        console.log(docs)
+                        // console.log(docs)
                     }
                 })
                 // console.log('resssssssssssssss',result[0].viewCount)
@@ -472,6 +495,7 @@ function getFullResult(data) {
                 const sem = data.sem.toUpperCase()
                 // console.log(reg, course, year, sem)
                 const examsList = JSON.parse(res)[reg][course][year][sem]
+                // console.log(examsList)
 
                 resInfo = { reg, course, year, sem }
                 if (examsList) {
@@ -505,22 +529,25 @@ function getFullBatchResults(data) {
                 const sem = data.sem.toUpperCase()
                 const examsList = JSON.parse(res)[reg][course][year][sem]
                 const resInfo = { reg, course, year, sem }
-                // console.log(examsList)
+                // console.log(data.rollPrefix)
                 if (examsList) {
                     examsList.reverse()
-                    const range = []
+                    const rolls = []
                     for (let i = data.start; i <= data.end; i++)
-                        range.push(i < 10 ? `0${i}` : i)
-
-                    const promises = range.map((rollSuffix) =>
-                        getFullResultFromDB(examsList, data.rollPrefix + rollSuffix,
-                            data.token, resInfo))
-                    const resultsList = []
-
-                    console.log(await promises[0])
-                    console.log(await promises[1])
-                    console.log(await promises[2])
-
+                        rolls.push(data.rollPrefix + ((i < 10) ? `0${i}` : i))
+                    // const promises = range.map((rollSuffix) =>
+                    //     getFullResultFromDB(examsList, data.rollPrefix + rollSuffix,
+                    //         data.token, resInfo))
+                    Promise.all(rolls.map(roll => getFullResultFromDB(examsList, roll, data.token, resInfo)))
+                        .then(res => {
+                            // console.log(res)
+                            resolve(res)
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            reject(err)
+                        })
+ 
                     // const resultsList = await Promise.all(promises)
                     // for (let i = 0; i < promises.length; i++) {
                     //     const res = await promises[i]
@@ -528,7 +555,7 @@ function getFullBatchResults(data) {
                     //     resultsList.push(res)
                     // }
                     // console.log('outside', resultsList)
-                    resolve(resultsList)
+                    // resolve(resultsList)
                 }
             }
             catch (err) {
