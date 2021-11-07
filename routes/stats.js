@@ -77,7 +77,7 @@ router.get('/new/:page', async (req, res) => {
 
 
       results.students[i]._doc['time'] =
-        new Date(new Date(results.students[i].addedTime).getTime() + 330 * 60 * 1000).toUTCString()
+        new Date(new Date(results.students[i].addedTime).getTime()).toUTCString()
       delete results.students[i]._doc['addedTime']
     }
     const sendRes = { count: results.count, colleges: searchCount, students: results.students }
@@ -107,8 +107,7 @@ router.get('/all/:page/:sortByCount', async (req, res) => {
 
       //change time to match timezon
       results.students[i]._doc['time'] =
-        new Date(new Date(results.students[i].latest).getTime() + 330
-          * 60 * 1000).toUTCString()
+        new Date(new Date(results.students[i].latest).getTime()).toUTCString()
       delete results.students[i]._doc['latest']
     }
     //sum total count in all records
