@@ -9,10 +9,7 @@ const FullResultSchema = mongoose.Schema({
     sem: String,
     attempts: Array,
     viewCount: Number,
-    lastViewed: {
-        type: Date,
-        default: Date
-    },
+    lastViewed:  Date,
 
     // resultID:String,
     // failedCount: Number,

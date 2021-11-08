@@ -405,6 +405,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                     }
                     resObj['name'] = studName
                     resObj['viewCount'] = 1
+                    resObj['lastViewed'] =  new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString() 
                     resObj['htn'] = htn
                     const sgpa = getFullSGPA(resObj['attempts'])
                     resObj['sgpa'] = sgpa
@@ -438,7 +439,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
     return new Promise(async (resolve, reject) => {
         //add anal
         if (!!examsList) {
-            examsList.forEach(row => addAnalytics(row.resultID, htn))
+            // examsList.forEach(row => addAnalytics(row.resultID, htn))
         }
         FullResult.find({
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
@@ -535,13 +536,12 @@ function getFullBatchResults(data) {
                     const rolls = []
                     for (let i = data.start; i <= data.end; i++)
                         rolls.push(data.rollPrefix + ((i < 10) ? `0${i}` : i))
-                    // const promises = range.map((rollSuffix) =>
-                    //     getFullResultFromDB(examsList, data.rollPrefix + rollSuffix,
-                    //         data.token, resInfo))
                     Promise.all(rolls.map(roll => getFullResultFromDB(examsList, roll, data.token, resInfo)))
                         .then(res => {
                             // console.log(res)
-                            resolve(res)
+                            //if a student was absent in every attempt, dont add to array
+                            const studentsResults  = res.filter((stud)=> stud)
+                            resolve(studentsResults)
                         })
                         .catch(err => {
                             console.log(err)
