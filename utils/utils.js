@@ -405,7 +405,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                     }
                     resObj['name'] = studName
                     resObj['viewCount'] = 1
-                    resObj['lastViewed'] =  new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString() 
+                    resObj['lastViewed'] = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                     resObj['htn'] = htn
                     const sgpa = getFullSGPA(resObj['attempts'])
                     resObj['sgpa'] = sgpa
@@ -439,7 +439,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
     return new Promise(async (resolve, reject) => {
         //add anal
         if (!!examsList) {
-            // examsList.forEach(row => addAnalytics(row.resultID, htn))
+            examsList.forEach(row => addAnalytics(row.resultID, htn))
         }
         FullResult.find({
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
@@ -450,7 +450,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
                 return reject(err)
             //res doesnt exist
             if (result.length == 0) {
-            // if (true) {
+                // if (true) {
                 try {
                     // const result = await getResultFromJNTU(resultID, htn)
                     const res = await getFullResultFromJNTU(examsList, htn, token, resInfo)
@@ -540,14 +540,14 @@ function getFullBatchResults(data) {
                         .then(res => {
                             // console.log(res)
                             //if a student was absent in every attempt, dont add to array
-                            const studentsResults  = res.filter((stud)=> stud)
-                            resolve(studentsResults)
+                            const studentsResult = res.filter(stud => { return Object.keys(stud).length })
+                            resolve(studentsResult)
                         })
                         .catch(err => {
                             console.log(err)
                             reject(err)
                         })
- 
+
                     // const resultsList = await Promise.all(promises)
                     // for (let i = 0; i < promises.length; i++) {
                     //     const res = await promises[i]
