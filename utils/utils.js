@@ -224,10 +224,15 @@ function getFullSGPA(attempts) {
                 for (let j = 0; j < attempts[i].subjects.length; j++) {
                     //check if new res > old res using Grade (for now)
                     for (let k = 0; k < bestAttempts.length; k++) {
-                        if (bestAttempts[k]['Subject Name'] == attempts[i].subjects[j]['Subject Name'])
-                            if (G2GP[attempts[i].subjects[j].Grade] > G2GP[bestAttempts[k].Grade]) {
-                                bestAttempts[k] = attempts[i].subjects[j]
-                            }
+                        //previously used 'Subject Name' as key
+                        if (bestAttempts[k]['1'] == attempts[i].subjects[j]['1'])
+                            //THIS IS A FUCKING SHIT CODE I KNOW
+                            //DONT FUCKEN TOUCH THIS CONSOLE LOG!! EVERYTHING WILL BREAK!!!!!!
+                            console.log(G2GP[attempts[i].subjects[j].Grade], G2GP[bestAttempts[k].Grade])
+                        if (G2GP[attempts[i].subjects[j].Grade] > G2GP[bestAttempts[k].Grade]) {
+                            bestAttempts[k] = attempts[i].subjects[j]
+                            // console.log(`${attempts[i].subjects[j]['Subject Name']} updated`)
+                        }
                     }
                 }
             }
@@ -239,12 +244,14 @@ function getFullSGPA(attempts) {
     let totalCred = 0
     let obtainedCred = 0
     let flag = false
+    // console.log(bestAttempts)
 
     bestAttempts.forEach(subject => {
         // console.log(subject)
         //return sgpa as 0 if any subject has credit 0
         if ((subject.Credits == 0 && subject.Grade == "F")
             || subject.Grade == "AB") {
+            console.log('abs', subject)
             flag = true
         }
 
@@ -253,6 +260,7 @@ function getFullSGPA(attempts) {
         // Credits column with Grade when student is detained
         if (subject.Grade == 0 && subject.Credits == "F") {
             flag = true
+            console.log('subject failed', subject)
         }
         // console.log(obtainedCred, totalCred)
         obtainedCred += G2GP[subject.Grade] * subject.Credits
@@ -450,7 +458,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
                 return reject(err)
             //res doesnt exist
             if (result.length == 0) {
-                // if (true) {
+            // if (true) {
                 try {
                     // const result = await getResultFromJNTU(resultID, htn)
                     const res = await getFullResultFromJNTU(examsList, htn, token, resInfo)
