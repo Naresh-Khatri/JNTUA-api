@@ -400,6 +400,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                     const sgpa = getFullSGPA(resObj['attempts'])
                     resObj['sgpa'] = sgpa
                     const fullResult = new FullResult(resObj)
+
                     fullResult.save()
                     // (err, res) => {
                     //     if (err)
