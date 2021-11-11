@@ -400,7 +400,8 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                     const sgpa = getFullSGPA(resObj['attempts'])
                     resObj['sgpa'] = sgpa
                     const fullResult = new FullResult(resObj)
-                    fullResult.save()
+
+                    // fullResult.save()
                     // (err, res) => {
                     //     if (err)
                     //         console.log(err)
@@ -439,8 +440,8 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
             if (err)
                 return reject(err)
             //res doesnt exist
-            if (result.length == 0) {
-            // if (true) {
+            // if (result.length == 0) {
+            if (true) {
                 try {
                     // const result = await getResultFromJNTU(resultID, htn)
                     const res = await getFullResultFromJNTU(examsList, htn, token, resInfo)
