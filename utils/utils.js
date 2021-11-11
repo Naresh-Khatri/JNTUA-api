@@ -202,6 +202,10 @@ function getResultFromDB(resultID, htn) {
 
 
 function getFullSGPA(attempts) {
+
+    // have an empty array bestAttempts then push all subjects from first attempt
+    // iterate over all attempts' subjects(index 1) and check if any subject is better
+    // than present in bestAttempts and update it
     let G2GP = {
         S: 10,
         O: 10,
@@ -222,18 +226,15 @@ function getFullSGPA(attempts) {
             //only check if stud attempted and this obj is not empty
             if (!!Object.keys(attempts[i]).length) {
                 for (let j = 0; j < attempts[i].subjects.length; j++) {
-                    //check if new res > old res using Grade (for now)
-                    for (let k = 0; k < bestAttempts.length; k++) {
-                        //previously used 'Subject Name' as key
-                        if (bestAttempts[k]['1'] == attempts[i].subjects[j]['1'])
-                            //THIS IS A FUCKING SHIT CODE I KNOW
-                            //DONT FUCKEN TOUCH THIS CONSOLE LOG!! EVERYTHING WILL BREAK!!!!!!
-                            console.log(G2GP[attempts[i].subjects[j].Grade], G2GP[bestAttempts[k].Grade])
-                        if (G2GP[attempts[i].subjects[j].Grade] > G2GP[bestAttempts[k].Grade]) {
-                            bestAttempts[k] = attempts[i].subjects[j]
-                            // console.log(`${attempts[i].subjects[j]['Subject Name']} updated`)
-                        }
+                    // console.log('checking', attempts[i].subjects[j]['Subject Name'])
+                    const index = bestAttempts.findIndex(sub =>
+                        sub['1'].toLowerCase() == attempts[i].subjects[j]['1'].toLowerCase()
+                    )
+                    //if found, check if grade is better
+                    if (index != -1) {
+                        bestAttempts[index] = attempts[i].subjects[j]
                     }
+
                 }
             }
         }
@@ -241,17 +242,16 @@ function getFullSGPA(attempts) {
 
     // console.log('actual len ', attempts[0].subjects.length, 'merged len = ', bestAttempts.length)
 
+    // attempts.map(attempt => console.log('attempt', attempt.subjects))
     let totalCred = 0
     let obtainedCred = 0
     let flag = false
     // console.log(bestAttempts)
-
     bestAttempts.forEach(subject => {
-        // console.log(subject)
         //return sgpa as 0 if any subject has credit 0
         if ((subject.Credits == 0 && subject.Grade == "F")
             || subject.Grade == "AB") {
-            console.log('abs', subject)
+            // console.log('abs', subject)
             flag = true
         }
 
@@ -260,7 +260,7 @@ function getFullSGPA(attempts) {
         // Credits column with Grade when student is detained
         if (subject.Grade == 0 && subject.Credits == "F") {
             flag = true
-            console.log('subject failed', subject)
+            // console.log('subject failed', subject)
         }
         // console.log(obtainedCred, totalCred)
         obtainedCred += G2GP[subject.Grade] * subject.Credits
@@ -273,6 +273,7 @@ function getFullSGPA(attempts) {
         return -1
     else
         return (obtainedCred / totalCred).toFixed(2)
+
     // console.log('bestAttempts = ', bestAttempts)
 }
 //only returns the subject array, accepts resutlID to add it in attempts obj
@@ -307,29 +308,6 @@ function getAllAttemptsObj(tableHTML, result) {
     const attempt = {}
     Object.assign(attempt, { failedCount, subjects, resultID: result.resultID })
     return attempt
-}
-function getStudName(resultID, htn, token) {
-    return new Promise(async (resolve, reject) => {
-        var config = {
-            method: 'get',
-            url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${resultID}&accessToken=${token}`,
-            headers: {
-                'Cookie': 'PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;',
-            },
-        };
-        try {
-            const res = await axios(config)
-            let studInfo = res.data.substring(0, res.data.indexOf('<br>'))
-                .replace(/&nbsp;|<\/?[^>]+(>|$)|Hall Ticket No :|Student name:/g, '')
-                .split(' ')
-            studInfo.shift()
-            // console.log(studInfo.join(' '))
-            return resolve(studInfo.join(' '))
-        }
-        catch (err) {
-            reject('some error 😢')
-        }
-    })
 }
 function getAttempt(result, htn, token) {
     // console.log('token', token)
@@ -372,7 +350,6 @@ function getAttempt(result, htn, token) {
                 //jntua is a fucking piece of shit for not adding these closing tags
                 //such a pain 
                 const resultObj = getAllAttemptsObj(tableHTML, result)
-                // console.log(resultObj)
                 resolve({ resultObj, studName })
             })
             .catch(err => {
@@ -385,7 +362,6 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
         try {
             Promise.all(examsList.map(exam => getAttempt(exam, htn, token)))
                 .then(async res => {
-
                     //remember the issue when the promise.all was resolving 
                     //before the getStudName promise was resolved?
                     // this is a hack to fix it
@@ -393,6 +369,8 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                     const attempts = []
                     let studName = ''
                     studAbsent = true
+                    // res.map(attempt => console.log('attempt', attempt.resultObj.subjects))
+
                     for (let i = 0; i < res.length; i++) {
                         if (res[i].resultObj == undefined) {
                             attempts.push({})
@@ -402,6 +380,9 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                         studName = res[i].studName
                         studAbsent = false
                     }
+                    // attempts.map(attempt => console.log('attempt', attempt.subjects))
+                    // console.log('stud abs', studAbsent)
+                    // console.log(attempts)
 
                     resObj = {}
                     //initialize with resInfo
@@ -415,6 +396,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                     resObj['viewCount'] = 1
                     resObj['lastViewed'] = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                     resObj['htn'] = htn
+                    // resObj.attempts.map(attempt => console.log('attempt', attempt.subjects))
                     const sgpa = getFullSGPA(resObj['attempts'])
                     resObj['sgpa'] = sgpa
                     const fullResult = new FullResult(resObj)
@@ -512,6 +494,7 @@ function getFullResult(data) {
                     //checks all resultIDs 
                     //examsList is obj of resultID and label, resInfo to help identify each result in db
                     const res = await getFullResultFromDB(examsList, data.htn, data.token, resInfo)
+                    // res.attempts.map(attempt => console.log('attempt', attempt.subjects))
                     // console.log(res)
                     resolve(res)
                     // examsList.map(row => console.log(row.title))
