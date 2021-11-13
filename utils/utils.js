@@ -393,6 +393,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                         return resolve({})
                     }
                     resObj['name'] = studName
+                    resObj['collegeCode'] = htn.slice(2, 4)
                     resObj['viewCount'] = 1
                     resObj['lastViewed'] = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                     resObj['htn'] = htn

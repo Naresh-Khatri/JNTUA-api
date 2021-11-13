@@ -7,6 +7,7 @@ const FullResultSchema = mongoose.Schema({
     course: String,
     year: String,
     sem: String,
+    collegeCode: String,
     attempts: Array,
     viewCount: Number,
     lastViewed:  Date,
