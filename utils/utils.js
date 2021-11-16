@@ -357,7 +357,7 @@ function getAttempt(result, htn, token) {
             })
     })
 }
-async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
+async function getFullResultFromJNTU(examsList, htn, token, resInfo, oldViewCount) {
     return new Promise(async (resolve, reject) => {
         try {
             Promise.all(examsList.map(exam => getAttempt(exam, htn, token)))
@@ -394,7 +394,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo) {
                     }
                     resObj['name'] = studName
                     resObj['collegeCode'] = htn.slice(2, 4)
-                    resObj['viewCount'] = 1
+                    resObj['viewCount'] = oldViewCount+1||1
                     resObj['lastViewed'] = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                     resObj['htn'] = htn
                     // resObj.attempts.map(attempt => console.log('attempt', attempt.subjects))
@@ -442,7 +442,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
                 return reject(err)
             //res doesnt exist
             if (result.length == 0) {
-            // if (true) {
+                // if (true) {
                 try {
                     // const result = await getResultFromJNTU(resultID, htn)
                     const res = await getFullResultFromJNTU(examsList, htn, token, resInfo)
@@ -456,17 +456,40 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
             }
             //fetched from db
             else {
-                FullResult.findOneAndUpdate({
-                    $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
-                }, { viewCount: result[0].viewCount + 1, lastViewed: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString() }, { useFindAndModify: false }, (err, docs) => {
-                    if (err)
-                        console.log(err)
-                    else {
-                        // console.log(docs)
+                try {
+                    //check if student failed
+                    if (result[0].sgpa <= 0) {
+                        let oldViewCount = result[0].viewCount
+                        console.log('student failed, recalculating')
+
+                        //remove old record
+                        FullResult.deleteOne({ htn: htn, year: resInfo.year, sem: resInfo.sem }, (err, res) => {
+                            if (err)
+                                console.log(err)
+                            else {
+                                console.log('deleted old record')
+                            }
+                        })
+                        //get new record and merge(only viewCount)
+                        const res = await getFullResultFromJNTU(examsList, htn, token, resInfo, oldViewCount)
+                        return resolve(res)
+
                     }
-                })
-                // console.log('resssssssssssssss',result[0].viewCount)
-                return resolve(result[0])
+                    FullResult.findOneAndUpdate({
+                        $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
+                    }, { viewCount: result[0].viewCount + 1, lastViewed: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString() }, { useFindAndModify: false }, (err, docs) => {
+                        if (err)
+                            console.log(err)
+                        else {
+                            // console.log(docs)
+                        }
+                    })
+                    // console.log('resssssssssssssss',result[0].viewCount)
+                    return resolve(result[0])
+                }
+                catch (err) {
+                    return err
+                }
             }
         })
     })
