@@ -6,6 +6,8 @@ const Result = require('../models/Result')
 const FullResult = require('../models/FullResult')
 const Analytics = require('../models/Analytics')
 
+const rollsArr = require('./rolls')
+
 function getToken() {
     return new Promise((resolve, reject) => {
         var config = {
@@ -394,7 +396,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo, oldViewCoun
                     }
                     resObj['name'] = studName
                     resObj['collegeCode'] = htn.slice(2, 4)
-                    resObj['viewCount'] = oldViewCount+1||1
+                    resObj['viewCount'] = oldViewCount + 1 || 1
                     resObj['lastViewed'] = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                     resObj['htn'] = htn
                     // resObj.attempts.map(attempt => console.log('attempt', attempt.subjects))
@@ -475,6 +477,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
                         return resolve(res)
 
                     }
+                    //update viewCount and lastViewed
                     FullResult.findOneAndUpdate({
                         $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
                     }, { viewCount: result[0].viewCount + 1, lastViewed: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString() }, { useFindAndModify: false }, (err, docs) => {
@@ -550,8 +553,16 @@ function getFullBatchResults(data) {
                 if (examsList) {
                     examsList.reverse()
                     const rolls = []
-                    for (let i = data.start; i <= data.end; i++)
-                        rolls.push(data.rollPrefix + ((i < 10) ? `0${i}` : i))
+                    console.log(data)
+                    start = Number.parseInt(data.start)
+                    end = Number.parseInt(data.end)
+
+                    for (let i =start; i <=end; i++) {
+                        console.log(i)
+                        let roll = data.rollPrefix + rollsArr[i];
+                        rolls.push(roll)
+                    }
+                    // console.log(rolls)
                     Promise.all(rolls.map(roll => getFullResultFromDB(examsList, roll, data.token, resInfo)))
                         .then(res => {
                             // console.log(res)
