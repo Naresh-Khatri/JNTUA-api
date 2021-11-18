@@ -4,5 +4,6 @@ const AnalyticsSchema = mongoose.Schema({
     resultID: String,
     latest: Date,
     count: Number,
+    collegeCode: String,
 })
 module.exports = mongoose.model('Analytics', AnalyticsSchema)

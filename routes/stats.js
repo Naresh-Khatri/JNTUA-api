@@ -9,11 +9,23 @@ const { monthNames } = require('../utils/utils')
 
 const collegesInfo = require('../collegeInfo.json')
 
+router.get('/totalSum', async (req, res) => {
+  try {
+    const result = await Analytics.aggregate([{$group: { _id: null, sum: { $sum: "$count" } } }])
+    // result.sort((a, b) => b.sum - a.sum)
+    // console.log(result)
+    res.send(result)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+
 router.get('/public', async (req, res) => {
   try {
     const results = {
-      count: await Result.find().countDocuments(),
-      students: await Result.find({}, '-_id htn addedTime').sort({ addedTime: 1 }).limit(req.params.page * 50),
+      count: await Analytics.find().countDocuments(),
+      students: await Analytics.find({}, '-_id htn addedTime').sort({ addedTime: 1 }).limit(req.params.page * 50),
     }
     // console.log(results.students)
     //create obj to store stats
@@ -29,23 +41,23 @@ router.get('/public', async (req, res) => {
         searchDates[date]++
 
       //count searchCount for each college
-      const collegeCode = (results.students[i]._doc.htn[2] +
-        results.students[i]._doc.htn[3]).toLowerCase()
-      if (!Object.keys(searchCount).includes(collegeCode))
-        searchCount[collegeCode] = 1
-      else
-        searchCount[collegeCode]++
+      // const collegeCode = (results.students[i].htn[2] +
+      //   results.students[i].htn[3]).toLowerCase()
+      // if (!Object.keys(searchCount).includes(collegeCode))
+      //   searchCount[collegeCode] = 1
+      // else
+      //   searchCount[collegeCode]++
     }
     let arr = Object.entries(searchCount)
     arr.sort(([a, b], [c, d]) => d - b)
     const topColleges = []
-    for (let i = 0; i < 3; i++) {
-      //loop through entire json to fine college name for code
-      collegesInfo.forEach(college => {
-        if (college.collegeCode.toLowerCase() == arr[i][0].toLowerCase())
-          topColleges.push(college)
-      });
-    }
+    // for (let i = 0; i < 3; i++) {
+    //   //loop through entire json to fine college name for code
+    //   collegesInfo.forEach(college => {
+    //     if (college.collegeCode.toLowerCase() == arr[i].toLowerCase())
+    //       topColleges.push(college)
+    //   });
+    // }
     const sendRes = {
       count: results.count, colleges: searchCount,
       topColleges, searchDates
