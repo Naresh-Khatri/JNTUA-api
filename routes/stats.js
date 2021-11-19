@@ -11,7 +11,18 @@ const collegesInfo = require('../collegeInfo.json')
 
 router.get('/totalSum', async (req, res) => {
   try {
-    const result = await Analytics.aggregate([{$group: { _id: null, sum: { $sum: "$count" } } }])
+    // const result = await Analytics.aggregate([{$group: { _id: null, sum: { $sum: "$count" } } }])
+    const result = await Analytics.aggregate(
+      [
+        {
+          $group: {
+            _id: { $substr: ["$htn", 2, 2] },
+            sum: { $sum: "$count" }
+          },
+        },
+        { $sort: { sum: -1 } }
+      ]
+    )
     // result.sort((a, b) => b.sum - a.sum)
     // console.log(result)
     res.send(result)
@@ -23,45 +34,60 @@ router.get('/totalSum', async (req, res) => {
 
 router.get('/public', async (req, res) => {
   try {
-    const results = {
-      count: await Analytics.find().countDocuments(),
-      students: await Analytics.find({}, '-_id htn addedTime').sort({ addedTime: 1 }).limit(req.params.page * 50),
-    }
+    // const results = {
+    //   count: await Analytics.find().countDocuments(),
+    //   students: await Analytics.find({}, '-_id htn addedTime').sort({ addedTime: 1 }).limit(req.params.page * 50),
+    // }
+    const result = await Analytics.aggregate(
+      [
+        {
+          $group: {
+            _id: { $toLower: { $substr: ["$htn", 2, 2] } },
+            total: { $sum: "$count" }
+          },
+        },
+        { $sort: { total: -1 } }
+      ]
+    )
+    const totalSearches = 
+    await Analytics.aggregate([{ $group: { _id: null, sum: { $sum: "$count" } } }])
+
     // console.log(results.students)
     //create obj to store stats
     searchCount = {}
     searchDates = {}
-    for (let i = 0; i < results.students.length; i++) {
-      let date = new Date(results.students[i].addedTime).getDate() + " " +
-        monthNames[new Date(results.students[i].addedTime).getMonth()]
+    // for (let i = 0; i < results.students.length; i++) {
+    //   let date = new Date(results.students[i].addedTime).getDate() + " " +
+    //     monthNames[new Date(results.students[i].addedTime).getMonth()]
 
-      if (!Object.keys(searchDates).includes(date))
-        searchDates[date] = 1
-      else
-        searchDates[date]++
+    //   if (!Object.keys(searchDates).includes(date))
+    //     searchDates[date] = 1
+    //   else
+    //     searchDates[date]++
 
-      //count searchCount for each college
-      // const collegeCode = (results.students[i].htn[2] +
-      //   results.students[i].htn[3]).toLowerCase()
-      // if (!Object.keys(searchCount).includes(collegeCode))
-      //   searchCount[collegeCode] = 1
-      // else
-      //   searchCount[collegeCode]++
-    }
-    let arr = Object.entries(searchCount)
-    arr.sort(([a, b], [c, d]) => d - b)
-    const topColleges = []
-    // for (let i = 0; i < 3; i++) {
-    //   //loop through entire json to fine college name for code
-    //   collegesInfo.forEach(college => {
-    //     if (college.collegeCode.toLowerCase() == arr[i].toLowerCase())
-    //       topColleges.push(college)
-    //   });
+    //   //count searchCount for each college
+    //   // const collegeCode = (results.students[i].htn[2] +
+    //   //   results.students[i].htn[3]).toLowerCase()
+    //   // if (!Object.keys(searchCount).includes(collegeCode))
+    //   //   searchCount[collegeCode] = 1
+    //   // else
+    //   //   searchCount[collegeCode]++
     // }
-    const sendRes = {
-      count: results.count, colleges: searchCount,
-      topColleges, searchDates
+    // let arr = Object.entries(searchCount)
+    // arr.sort(([a, b], [c, d]) => d - b)
+    const topColleges = []
+    for (let i = 0; i < 3; i++) {
+      //loop through entire json to fine college name for code
+      collegesInfo.forEach(college => {
+        if (college.collegeCode.toLowerCase() == result[i]['_id'].toLowerCase())
+          topColleges.push(college)
+      });
     }
+    // const sendRes = {
+    //    results.count, colleges: searchCount,
+    //   topColleges, searchDates
+    // }
+    const sendRes = { searches: result, topColleges, totalSearches: totalSearches[0].sum }
     // delete results
     // console.log(sendRes)
     res.json(sendRes)
