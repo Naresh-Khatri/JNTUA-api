@@ -59,6 +59,11 @@ const filteredResultsRows = function (data) {
 function getResultInfoObj(str, resultID) {
     const obj = {}
     var regulationRegExp = /\((R[^)]+)\)/;
+
+    //sometimes first char of str contains a space
+    if(str[0] === ' ') {
+        str = str.substring(1)
+    }
     const splitString = str.toUpperCase().split(' ')
 
     title = obj['title'] = str
@@ -67,6 +72,7 @@ function getResultInfoObj(str, resultID) {
     sem = obj['sem'] = splitString[splitString.indexOf('SEMESTER') - 1] == 'III' ? "I" :
         splitString[splitString.indexOf('SEMESTER') - 1] == 'IV' ? "II" :
             splitString[splitString.indexOf('SEMESTER') - 1] || null
+
     course = obj['course'] = splitString[0]
     resultID = obj['resultID'] = parseInt(resultID)
     // obj['type'] = splitString.includes('REGULAR') && splitString.includes('SUPPLEMENTARY')

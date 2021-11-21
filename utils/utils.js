@@ -220,8 +220,15 @@ function getFullSGPA(attempts) {
         AB: 0,
         Y: 0
     }
+    let bestAttempts;
     //add first attempts to bestAttempts
-    let bestAttempts = attempts[0].subjects
+    for (let i = 0; i < attempts.length; i++) {
+        console.log(attempts[i])
+        if(attempts[i].subjects){
+            bestAttempts = attempts[i].subjects
+            break
+        }
+    }
     //check if stud failed in first attempt
     if (attempts.length > 1) {
         for (let i = 1; i < attempts.length; i++) {
@@ -248,7 +255,7 @@ function getFullSGPA(attempts) {
     let totalCred = 0
     let obtainedCred = 0
     let flag = false
-    // console.log(bestAttempts)
+    // console.log('bestAttempts',bestAttempts)
     bestAttempts.forEach(subject => {
         //return sgpa as 0 if any subject has credit 0
         if ((subject.Credits == 0 && subject.Grade == "F")
@@ -323,6 +330,10 @@ function getAttempt(result, htn, token) {
         };
         axios(config)
             .then(async (res) => {
+                // console.log("url",config.url)
+                // console.log("result",result)
+                // console.log("res.data",res.data)
+
                 if (res.data == 'Something goes wrong 😟') {
                     console.log(res.data)
                     reject('Something goes wrong 😟')
