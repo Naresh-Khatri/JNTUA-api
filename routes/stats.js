@@ -52,7 +52,7 @@ router.get('/public', async (req, res) => {
     )
     const totalSearches = 
     await Analytics.aggregate([{ $group: { _id: null, sum: { $sum: "$count" } } }])
-    const searchesArr = await Search.find({}, '-_id -__v date searchCount').sort({ date: 1 })
+    const searchesArr = await Search.find({}, '-_id  date searchCount').sort({ date: 1 })
 
     // console.log(results.students)
     //create obj to store stats
