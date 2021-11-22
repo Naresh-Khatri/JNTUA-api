@@ -5,6 +5,7 @@ const HtmlTableToJson = require('html-table-to-json');
 const Result = require('../models/Result')
 const FullResult = require('../models/FullResult')
 const Analytics = require('../models/Analytics')
+const Search = require('../models/Search')
 
 const rollsArr = require('./rolls')
 
@@ -58,6 +59,9 @@ function convert2obj(tableHTML, resultID) {
 
     return resultObj
 }
+function formateDate(date) {
+    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+}
 function addAnalytics(resultID, htn) {
     Analytics.find({ resultID, htn }, async (err, result) => {
         if (err) {
@@ -73,6 +77,9 @@ function addAnalytics(resultID, htn) {
                         result.latest = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                         result.save()
                     })
+                    .catch(err => {
+                        console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
+                    })
             }
             else {
                 //add new entry with count=1, current time and save
@@ -82,6 +89,22 @@ function addAnalytics(resultID, htn) {
                     count: 1, latest: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                 })
                 anal.save()
+            }
+        }
+    })
+    //increase the search count for the day
+    let date = formateDate(new Date())
+    Search.findOneAndUpdate({ date: date }, { $inc: { searchCount: 1 }, "$push": { time: new Date().getHours() } }, { new: true, useFindAndModify:false }, (err, result) => {
+        if (err) {
+            console.log('while updating searches',err)
+        }
+        else {
+            if(result == null){
+                const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
+                search.save()
+                .then(result => {
+                    console.log('search added:',result)
+                })
             }
         }
     })
@@ -153,7 +176,7 @@ function getResultFromJNTU(resultID, htn) {
         axios(config)
             .then(async (res) => {
                 if (res.data == 'Something goes wrong') {
-                    console.log(res.data)
+                    // console.log(res.data)
                     token = await getToken()
                     return reject('Something goes wrong')
                 }
@@ -223,8 +246,8 @@ function getFullSGPA(attempts) {
     let bestAttempts;
     //add first attempts to bestAttempts
     for (let i = 0; i < attempts.length; i++) {
-        console.log(attempts[i])
-        if(attempts[i].subjects){
+        // console.log(attempts[i])
+        if (attempts[i].subjects) {
             bestAttempts = attempts[i].subjects
             break
         }
@@ -568,7 +591,7 @@ function getFullBatchResults(data) {
                     start = Number.parseInt(data.start)
                     end = Number.parseInt(data.end)
 
-                    for (let i =start; i <=end; i++) {
+                    for (let i = start; i <= end; i++) {
                         console.log(i)
                         let roll = data.rollPrefix + rollsArr[i];
                         rolls.push(roll)
