@@ -94,17 +94,17 @@ function addAnalytics(resultID, htn) {
     })
     //increase the search count for the day
     let date = formateDate(new Date())
-    Search.findOneAndUpdate({ date: date }, { $inc: { searchCount: 1 }, "$push": { time: new Date().getHours() } }, { new: true, useFindAndModify:false }, (err, result) => {
+    Search.findOneAndUpdate({ date: date }, { $inc: { searchCount: 1 }, "$push": { time: new Date().getHours() } }, { new: true, useFindAndModify: false }, (err, result) => {
         if (err) {
-            console.log('while updating searches',err)
+            console.log('while updating searches', err)
         }
         else {
-            if(result == null){
+            if (result == null) {
                 const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
                 search.save()
-                .then(result => {
-                    console.log('search added:',result)
-                })
+                    .then(result => {
+                        console.log('search added:', result)
+                    })
             }
         }
     })
@@ -438,15 +438,15 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo, oldViewCoun
                     resObj['sgpa'] = sgpa
                     const fullResult = new FullResult(resObj)
 
-                    fullResult.save()
-                    // (err, res) => {
-                    //     if (err)
-                    //         console.log(err)
-                    //     else {
-                    //         // console.log(res)
-                    //         return resObj
-                    //     }
-                    // })
+                    fullResult.save(
+                        (err, res) => {
+                            if (err)
+                                console.log(err)
+                            else {
+                                // console.log(res)
+                                return resObj
+                            }
+                        })
                     // console.log('resObj', resObj)
                     // console.log('before',resObj.htn, resObj.attempts[0].subjects[3])
                     resolve(resObj)
