@@ -62,52 +62,65 @@ function convert2obj(tableHTML, resultID) {
 function formateDate(date) {
     return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
 }
-function addAnalytics(resultID, htn) {
-    Analytics.find({ resultID, htn }, async (err, result) => {
-        if (err) {
-            console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
-        }
-        else {
-            //result exist
-            if (result.length) {
-                Analytics.findOne({ htn, resultID })
-                    .then((result, err) => {
-                        //increase count, update time and save
-                        result.count += 1
-                        result.latest = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
-                        result.save()
-                    })
-                    .catch(err => {
-                        console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
-                    })
+async function addAnalytics(resultID, htn) {
+    try {
+        Analytics.find({ resultID, htn }, async (err, result) => {
+            if (err) {
+                console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
             }
             else {
-                //add new entry with count=1, current time and save
-                const anal = new Analytics({
-                    htn,
-                    resultID,
-                    count: 1, latest: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
-                })
-                anal.save()
-            }
-        }
-    })
-    //increase the search count for the day
-    let date = formateDate(new Date())
-    Search.findOneAndUpdate({ date: date }, { $inc: { searchCount: 1 }, "$push": { time: new Date().getHours() } }, { new: true, useFindAndModify: false }, (err, result) => {
-        if (err) {
-            console.log('while updating searches', err)
-        }
-        else {
-            if (result == null) {
-                const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
-                search.save()
-                    .then(result => {
-                        console.log('search added:', result)
+                //result exist
+                if (result.length) {
+                    Analytics.findOne({ htn, resultID })
+                        .then((result, err) => {
+                            //increase count, update time and save
+                            result.count += 1
+                            result.latest = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
+                            result.save()
+                        })
+                        .catch(err => {
+                            console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
+                        })
+                }
+                else {
+                    //add new entry with count=1, current time and save
+                    const anal = new Analytics({
+                        htn,
+                        resultID,
+                        count: 1, latest: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toUTCString()
                     })
+                    anal.save()
+                }
             }
+        })
+        //increase the search count for the day
+        let date = formateDate(new Date())
+        // Search.findOneAndUpdate({ date: date }, { $inc: { searchCount: 1 }}, { new: true, useFindAndModify: false }, (err, result) => {
+        const result = await Search.findOneAndUpdate({ date: date }, { $inc: { searchCount: 1 }, "$push": { time: new Date().getHours() } }, { new: true, useFindAndModify: false })
+        if (result.length == 0) {
+            const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
+            search.save()
+                .then(result => {
+                    console.log('search added:', result)
+                })
         }
-    })
+        // if (err) {
+        //     console.log('while updating searches', err)
+        // }
+        // else {
+        //     if (result.length == 0) {
+        //         // const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
+        //         // search.save()
+        //         //     .then(result => {
+        //         //         console.log('search added:', result)
+        //         //     })
+        //     }
+        // }
+        // })
+    }
+    catch (err) {
+        console.log(err)
+    }
 }
 
 function getSGPA(subjects) {
@@ -402,6 +415,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo, oldViewCoun
                     //before the getStudName promise was resolved?
                     // this is a hack to fix it
                     // we take the first attempt and get the stud name
+                    // console.log('res', res)
                     const attempts = []
                     let studName = ''
                     studAbsent = true
@@ -592,7 +606,6 @@ function getFullBatchResults(data) {
                     end = Number.parseInt(data.end)
 
                     for (let i = start; i <= end; i++) {
-                        console.log(i)
                         let roll = data.rollPrefix + rollsArr[i];
                         rolls.push(roll)
                     }
