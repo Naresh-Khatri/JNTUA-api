@@ -486,7 +486,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
         FullResult.find({
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }]
         }, async (err, result) => {
-            // console.log('result', result)
+            console.log('result', result)
             //error
             if (err)
                 return reject(err)
