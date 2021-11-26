@@ -43,7 +43,7 @@ router.get('/public', async (req, res) => {
       [
         {
           $group: {
-            _id: { $toLower: { $substr: ["$htn", 2, 2] } },
+            _id: { $toLower: { $substrCP : ["$htn", 2, 2] } },
             total: { $sum: "$count" }
           },
         },
