@@ -64,27 +64,14 @@ function formateDate(date) {
 }
 async function addAnalytics(resultID, htn) {
   try {
-    Analytics.find({ resultID, htn }, async (err, result) => {
-      if (err) {
-        console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
-      }
-      else {
-        //result exist
-        if (result.length) {
-          Analytics.findOneAndUpdate({ htn, resultID }, {
-            $inc: { count: 1 },
-            latest: new Date(new Date().getTime() - new Date().getTimezoneOffset()
-              * 60 * 1000).toUTCString()
-          }, { new: true, useFindAndModify: false })
-            .then((result, err) => {
-              //increase count, update time and save
-              console.log(`Analytics updated for ${htn} - ${resultID}`)
-            })
-            .catch(err => {
-              console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
-            })
-        }
-        else {
+    Analytics.findOneAndUpdate({ htn, resultID }, {
+      $inc: { count: 1 },
+      latest: new Date(new Date().getTime() - new Date().getTimezoneOffset()
+        * 60 * 1000).toUTCString()
+    }, { new: true, useFindAndModify: false })
+      .then((result, err) => {
+        //increase count, update time and save
+        if (result.length == 0) {
           //add new entry with count=1, current time and save
           const anal = new Analytics({
             htn,
@@ -93,25 +80,29 @@ async function addAnalytics(resultID, htn) {
           })
           anal.save((err, result) => console.log(err, result))
         }
-      }
-    })
+      })
+      .catch(err => {
+        console.log(`Error: Couldnt add anal for ${htn} - ${resultID}`)
+      })
+
     //increase the search count for the day
     let date = formateDate(new Date())
-    // Search.findOneAndUpdate({ date: date }, { $inc: { searchCount: 1 }}, { new: true, useFindAndModify: false }, (err, result) => {
     Search.findOneAndUpdate({ date: date }, {
       $inc: { searchCount: 1 },
     }, { new: true, useFindAndModify: false })
-      // .then(result => {
-      //   if (!result) {
-      //     console.log('result', result)
-      //     console.log('New date! adding new record in search')
-      //     const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
-      //     search.save()
-      //       .then(result => {
-      //         console.log('search added:', result)
-      //       })
-      //   }
-      // })
+      .then(result => {
+        if (result.length == 0) {
+          console.log('New date! adding new record in search')
+          const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
+          search.save()
+            .then(result => {
+              console.log('search added:', result)
+            })
+        }
+      })
+      .catch(err => {
+        console.log('Error:', err)
+      })
 
     // if (err) {
     //     console.log('while updating searches', err)
