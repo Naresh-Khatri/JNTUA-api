@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
   next()
 })
-app.use(morgan('dev'))
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url" :status :res[content-length] ":referrer" ":user-agent'))
 app.use(express.json());
 app.use('/stats', stats)
 
