@@ -4,7 +4,6 @@ const axios = require('axios')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const chalk = require('chalk')
-const moment = require('moment')
 
 const Result = require('./models/Result')
 const Feedback = require('./models/Feedback')
@@ -30,7 +29,7 @@ app.use(
   morgan(function (tokens, req, res) {
     var parenRegExp = /\(([^)]+)\)/;
     // let currTime = new Date(new Date(tokens.date(req, res, 'web')).getTime())
-    let currTime = moment().format('MMMM Do YYYY, h:mm:ss a')
+    let currTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
     return [
       chalk.green('👉' + tokens.method(req, res)),
       chalk.bgGreen(tokens.status(req, res)),
