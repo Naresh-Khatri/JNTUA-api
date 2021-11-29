@@ -3,6 +3,7 @@ const express = require('express')
 const axios = require('axios')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const chalk = require('chalk')
 
 const Result = require('./models/Result')
 const Feedback = require('./models/Feedback')
@@ -24,7 +25,24 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
   next()
 })
-app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url" :status :res[content-length] ":referrer" ":user-agent :response-time ms'))
+app.use(
+  morgan(function (tokens, req, res) {
+    var parenRegExp = /\(([^)]+)\)/;
+    return [
+      '\n',
+      chalk.green(tokens.method(req, res)),
+      chalk.bgGreen(tokens.status(req, res)),
+      chalk.bgBlueBright(tokens.res(req, res, 'total-time'), '-'),
+      chalk.bgBlueBright(new Date(new Date(tokens.date(req, res, 'web')).getTime())),
+      chalk.bgMagentaBright(tokens.url(req, res)),
+      chalk.bgRedBright(parenRegExp.exec(tokens['user-agent'](req, res))[0]),
+      chalk.bgBlueBright(tokens.referrer(req, res)),
+      chalk.bgCyan(tokens.res(req, res, 'content-length'), '-'),
+      "⚡",
+      chalk.greenBright(tokens['response-time'](req, res), 'ms')
+    ].join(' ')
+  })
+)
 app.use(express.json());
 app.use('/stats', stats)
 
