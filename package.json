@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "html-table-to-json": "^1.0.0",
     "jssoup": "0.0.12",
+    "moment": "^2.29.1",
     "mongoose": "^5.12.13",
     "morgan": "^1.10.0",
     "swagger-ui-express": "^4.1.6",

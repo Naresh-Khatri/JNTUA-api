@@ -92,7 +92,8 @@ async function addAnalytics(resultID, htn) {
       $inc: { searchCount: 1 },
     }, { new: true, useFindAndModify: false })
       .then(result => {
-        if (result.length == 0) {
+        // result is null if no result found
+        if (!result) {
           console.log('New date! adding new record in search')
           const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
           search.save()

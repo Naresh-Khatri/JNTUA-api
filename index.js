@@ -4,6 +4,7 @@ const axios = require('axios')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const chalk = require('chalk')
+const moment = require('moment')
 
 const Result = require('./models/Result')
 const Feedback = require('./models/Feedback')
@@ -28,11 +29,13 @@ app.use((req, res, next) => {
 app.use(
   morgan(function (tokens, req, res) {
     var parenRegExp = /\(([^)]+)\)/;
+    // let currTime = new Date(new Date(tokens.date(req, res, 'web')).getTime())
+    let currTime = moment().format('MMMM Do YYYY, h:mm:ss a')
     return [
       chalk.green('👉' + tokens.method(req, res)),
       chalk.bgGreen(tokens.status(req, res)),
-      chalk.bgBlueBright('⏳' + tokens.res(req, res, 'total-time'), '-'),
-      chalk.bgBlueBright("⏰" + new Date(new Date(tokens.date(req, res, 'web')).getTime())),
+      // chalk.bgBlueBright('⏳' + tokens.res(req, res, 'total-time'), '-'),
+      chalk.bgBlueBright("⏰" + currTime),
       chalk.bgMagentaBright("🔗" + tokens.url(req, res)),
       chalk.bgRedBright("📱" + parenRegExp.exec(tokens['user-agent'](req, res))[0]),
       chalk.bgBlueBright("🧾" + tokens.referrer(req, res)),
