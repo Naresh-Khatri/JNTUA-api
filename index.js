@@ -30,16 +30,25 @@ app.use(
     var parenRegExp = /\(([^)]+)\)/;
     // let currTime = new Date(new Date(tokens.date(req, res, 'web')).getTime())
     let currTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
+    let deviceInfo
+    try {
+      deiceInfo = parenRegExp.exec(tokens['user-agent'](req, res))[0]
+    } catch (err) {
+      deviceInfo = "dunno 🤔"
+    }
     return [
       chalk.green('👉' + tokens.method(req, res)),
       chalk.bgGreen(tokens.status(req, res)),
       // chalk.bgBlueBright('⏳' + tokens.res(req, res, 'total-time'), '-'),
-      chalk.bgBlueBright("⏰" + currTime),
+      chalk.bgBlueBright("⏰" + currTime.split(',')[1]),
+      chalk.bgRedBright("📱" + deviceInfo),
       chalk.bgMagentaBright("🔗" + tokens.url(req, res)),
-      chalk.bgRedBright("📱" + parenRegExp.exec(tokens['user-agent'](req, res))[0]),
-      chalk.bgBlueBright("🧾" + tokens.referrer(req, res)),
-      chalk.bgCyan("📦" + tokens.res(req, res, 'content-length'), '-'),
-      chalk.greenBright("⚡" + tokens['response-time'](req, res), 'ms')
+      chalk.bgBlueBright(tokens.referrer(req, res) ==
+        'https://naresh-khatri.github.io/JNTUA-result-analyser-spa/' ?
+        "🧾 " + "Homepage" : "🧾 " + tokens.referrer(req, res)),
+      chalk.bgCyan("📦" + tokens.res(req, res, 'content-length')),
+      "⚡ " +
+      chalk.greenBright(tokens['response-time'](req, res), 'ms')
     ].join(' ')
   })
 )
