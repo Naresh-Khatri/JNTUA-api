@@ -32,7 +32,7 @@ app.use(
     let currTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })
     let deviceInfo
     try {
-      deiceInfo = parenRegExp.exec(tokens['user-agent'](req, res))[0]
+      deviceInfo = parenRegExp.exec(tokens['user-agent'](req, res))[0]
     } catch (err) {
       deviceInfo = "dunno 🤔"
     }
