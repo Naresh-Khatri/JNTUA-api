@@ -34,7 +34,7 @@ app.use(
     try {
       deviceInfo = parenRegExp.exec(tokens['user-agent'](req, res))[0]
     } catch (err) {
-      deviceInfo = "dunno 🤔"
+      deviceInfo = tokens['user-agent'](req, res) + "dunno 🤔"
     }
     return [
       chalk.green('👉' + tokens.method(req, res)),

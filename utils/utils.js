@@ -394,7 +394,7 @@ function getAttempt(result, htn, token) {
         }
         //reject if result not found
         if (res.data.includes('Invalid')) {
-          console.log(`Invalid htn=${htn} with resid=${result.resultID}`)
+          // console.log(`Invalid htn=${htn} with resid=${result.resultID}`)
           return resolve({})
         }
 
@@ -512,7 +512,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
           //check if student failed
           if (result[0].sgpa <= 0) {
             let oldViewCount = result[0].viewCount
-            console.log(htn, 'failed, recalculating')
+            // console.log(htn, 'failed, recalculating')
             // if failed then get all the attempts from JNTUA and update that in db
             Promise.all(examsList.map(exam => getAttempt(exam, htn, token)))
               .then(res => {
