@@ -59,47 +59,52 @@ const filteredResultsRows = function (data) {
 function getResultInfoObj(str, resultID) {
     const obj = {}
     var regulationRegExp = /\((R[^)]+)\)/;
+    try {
 
-    //sometimes first char of str contains a space
-    if(str[0] === ' ') {
-        str = str.substring(1)
-    }
-    const splitString = str.toUpperCase().split(' ')
+        //sometimes first char of str contains a space
+        if (str[0] === ' ') {
+            str = str.substring(1)
+        }
+        const splitString = str.toUpperCase().split(' ')
 
-    title = obj['title'] = str
-    reg = obj['reg'] = !!regulationRegExp.exec(str) ? regulationRegExp.exec(str)[1] : null
-    year = obj['year'] = splitString[splitString.indexOf('YEAR') - 1] || null
-    sem = obj['sem'] = splitString[splitString.indexOf('SEMESTER') - 1] == 'III' ? "I" :
-        splitString[splitString.indexOf('SEMESTER') - 1] == 'IV' ? "II" :
-            splitString[splitString.indexOf('SEMESTER') - 1] || null
+        title = obj['title'] = str
+        reg = obj['reg'] = !!regulationRegExp.exec(str) ? regulationRegExp.exec(str)[1] : null
+        year = obj['year'] = splitString[splitString.indexOf('YEAR') - 1] || null
+        sem = obj['sem'] = splitString[splitString.indexOf('SEMESTER') - 1] == 'III' ? "I" :
+            splitString[splitString.indexOf('SEMESTER') - 1] == 'IV' ? "II" :
+                splitString[splitString.indexOf('SEMESTER') - 1] || null
 
-    course = obj['course'] = splitString[0]
-    resultID = obj['resultID'] = parseInt(resultID)
-    // obj['type'] = splitString.includes('REGULAR') && splitString.includes('SUPPLEMENTARY')
-    //     ? 'regular & suppy' : splitString.includes('REGULAR') ? 'regular' :
-    //         splitString.includes('SUPPLEMENTARY') ? 'supply' : null
-    //obj['heldOn'] = splitString[splitString.length - 2] + " " + splitString[splitString.length - 1]
+        course = obj['course'] = splitString[0]
+        resultID = obj['resultID'] = parseInt(resultID)
+        // obj['type'] = splitString.includes('REGULAR') && splitString.includes('SUPPLEMENTARY')
+        //     ? 'regular & suppy' : splitString.includes('REGULAR') ? 'regular' :
+        //         splitString.includes('SUPPLEMENTARY') ? 'supply' : null
+        //obj['heldOn'] = splitString[splitString.length - 2] + " " + splitString[splitString.length - 1]
 
 
-    if (resultsObj[reg]) {
-        if (resultsObj[reg][course]) {
-            if (resultsObj[reg][course][year]) {
-                if (resultsObj[reg][course][year][sem]) {
-                    resultsObj[reg][course][year][sem].push({ title, resultID })
+        if (resultsObj[reg]) {
+            if (resultsObj[reg][course]) {
+                if (resultsObj[reg][course][year]) {
+                    if (resultsObj[reg][course][year][sem]) {
+                        resultsObj[reg][course][year][sem].push({ title, resultID })
+                    } else {
+                        resultsObj[reg][course][year][sem] = [{ title, resultID }]
+                    }
                 } else {
-                    resultsObj[reg][course][year][sem] = [{ title, resultID }]
+                    resultsObj[reg][course][year] = { [sem]: [{ title, resultID }] }
                 }
             } else {
-                resultsObj[reg][course][year] = { [sem]: [{ title, resultID }] }
+                resultsObj[reg][course] = { [year]: { [sem]: [{ title, resultID }] } }
             }
         } else {
-            resultsObj[reg][course] = { [year]: { [sem]: [{ title, resultID }] } }
+            resultsObj[reg] = { [course]: { [year]: { [sem]: [{ title, resultID }] } } }
         }
-    } else {
-        resultsObj[reg] = { [course]: { [year]: { [sem]: [{ title, resultID }] } } }
-    }
 
-    return obj
+        return obj
+    } catch (err) {
+        console.log('Cant parse table from jntua homepage!')
+        return
+    }
 }
 
 module.exports = { getAllResultsRows }
