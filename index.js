@@ -5,10 +5,15 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 const chalk = require('chalk')
 
+
+//models
 const Result = require('./models/Result')
 const Feedback = require('./models/Feedback')
 const Share = require('./models/Share')
 const Analytics = require('./models/Analytics')
+const Rating = require('./models/Rating')
+
+
 const stats = require('./routes/stats')
 
 const { getToken, convert2obj, getResultIDDetails,
@@ -25,6 +30,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
   next()
 })
+//custom logging morgan middleware
 app.use(
   morgan(function (tokens, req, res) {
     var parenRegExp = /\(([^)]+)\)/;
@@ -121,6 +127,13 @@ app.post('/feedback', async (req, res) => {
       res.status(200).send(result)
     })
 })
+app.post('/rate', async(req,res)=>{
+  console.log('new rating', req.body)
+  const rating = new Rating(req.body)
+  rating.save()
+  res.status(200).send()
+})
+
 app.post('/share', async (req, res) => {
   console.log(req.body)
   const share = new Share(req.body)

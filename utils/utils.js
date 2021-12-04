@@ -88,10 +88,17 @@ async function addAnalytics(resultID, htn) {
 
     //increase the search count for the day
     let date = formateDate(new Date())
+
+    let currTime = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000)
+    // let formattedTime = currTime.getHours().length == 1 ? "0" + currTime.getHours() : currTime.getHours() + ":"
+    // currTime.getMinutes().length == 1 ? "0" + currTime.getMinutes() : currTime.getMinutes() + ":"
+    // currTime.getSeconds().length == 1 ? "0" + currTime.getSeconds() : currTime.getSeconds()
     Search.findOneAndUpdate({ date: date }, {
       $inc: { searchCount: 1 },
+      $push: { time: currTime }
     }, { new: true, useFindAndModify: false })
       .then(result => {
+        console.log(result)
         // result is null if no result found
         if (!result) {
           console.log('New date! adding new record in search')
@@ -267,10 +274,10 @@ function getFullSGPA(attempts) {
       }
     }
     //return SGPA = 0 if no bestAttempt found
-    if(!bestAttempts){
+    if (!bestAttempts) {
       console.log('Couldnt find bestAttempt so returning SGPA 0')
       return 0
-    } 
+    }
 
     //check if stud failed in first attempt
     if (attempts.length > 1) {
@@ -430,7 +437,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo, oldViewCoun
           const attempts = []
           let studName = ''
           studAbsent = true
-          // res.map(attempt => console.log('attempt', attempt.resultObj.subjects))
+          res.map(attempt => console.log('attempt', attempt.resultObj.subjects))
 
           for (let i = 0; i < res.length; i++) {
             if (res[i].resultObj == undefined) {
