@@ -98,7 +98,7 @@ async function addAnalytics(resultID, htn) {
       $push: { time: currTime }
     }, { new: true, useFindAndModify: false })
       .then(result => {
-        console.log(result)
+        // console.log(result)
         // result is null if no result found
         if (!result) {
           console.log('New date! adding new record in search')
@@ -437,7 +437,7 @@ async function getFullResultFromJNTU(examsList, htn, token, resInfo, oldViewCoun
           const attempts = []
           let studName = ''
           studAbsent = true
-          res.map(attempt => console.log('attempt', attempt.resultObj.subjects))
+          // res.map(attempt => console.log('attempt', attempt))
 
           for (let i = 0; i < res.length; i++) {
             if (res[i].resultObj == undefined) {
