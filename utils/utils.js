@@ -142,6 +142,7 @@ function getSGPA(subjects) {
     E: 5,
     F: 0,
     AB: 0,
+    N: 0,
     Y: 0
   }
   let totalCred = 0
@@ -262,6 +263,7 @@ function getFullSGPA(attempts) {
       E: 5,
       F: 0,
       AB: 0,
+      N: 0,
       Y: 0
     }
     let bestAttempts;

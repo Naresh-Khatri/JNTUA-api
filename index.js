@@ -43,7 +43,12 @@ app.use(
       deviceInfo = tokens['user-agent'](req, res) + "dunno 🤔"
     }
     return [
-      chalk.green('👉' + tokens.method(req, res)),
+      '👉',
+      tokens.method(req, res) === 'POST'?
+      chalk.yellow( tokens.method(req, res)):
+      chalk.green( tokens.method(req, res)),
+      tokens.status(req, res) >400?
+      chalk.bgRed(tokens.status(req, res)):
       chalk.bgGreen(tokens.status(req, res)),
       // chalk.bgBlueBright('⏳' + tokens.res(req, res, 'total-time'), '-'),
       chalk.bgBlueBright("⏰" + currTime.split(',')[1]),
