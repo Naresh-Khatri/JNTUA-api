@@ -638,7 +638,7 @@ function getFullResult(data) {
         const course = data.course.toUpperCase();
         const year = data.year.toUpperCase();
         const sem = data.sem.toUpperCase();
-        console.log(reg, course, year, sem);
+        // console.log(reg, course, year, sem);
         const examsList = JSON.parse(res)[reg][course][year][sem];
         // console.log(examsList)
 
