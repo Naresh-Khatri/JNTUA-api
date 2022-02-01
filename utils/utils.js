@@ -109,25 +109,32 @@ async function addAnalytics(resultID, htn) {
     // currTime.getMinutes().length == 1 ? "0" + currTime.getMinutes() : currTime.getMinutes() + ":"
     // currTime.getSeconds().length == 1 ? "0" + currTime.getSeconds() : currTime.getSeconds()
 
-    // Search.findOneAndUpdate({ date: date }, {
-    //   $inc: { searchCount: 1 },
-    //   $push: { time: currTime }
-    // }, { new: true, useFindAndModify: false })
-    //   .then(result => {
-    //     // console.log(result)
-    //     // result is null if no result found
-    //     if (!result) {
-    //       console.log('New date! adding new record in search')
-    //       const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
-    //       search.save()
-    //         .then(result => {
-    //           console.log('search added:', result)
-    //         })
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log('Error:', err)
-    //   })
+    Search.findOneAndUpdate(
+      { date: date },
+      {
+        $inc: { searchCount: 1 },
+        // $push: { time: currTime }
+      },
+      { new: true, useFindAndModify: false }
+    )
+      .then((result) => {
+        // console.log(result)
+        // result is null if no result found
+        if (!result) {
+          console.log("New date! adding new record in search");
+          const search = new Search({
+            date: date,
+            count: 1,
+            // time: [new Date().getHours()],
+          });
+          search.save().then((result) => {
+            console.log("search added:", result);
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error:", err);
+      });
 
     // if (err) {
     //     console.log('while updating searches', err)
