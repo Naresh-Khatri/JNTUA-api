@@ -295,7 +295,7 @@ function getFullSGPA(attempts) {
     }
     //return SGPA = 0 if no bestAttempt found
     if (!bestAttempts) {
-      // console.log('Couldnt find bestAttempt so returning SGPA 0')
+      console.log("Couldnt find bestAttempt so returning SGPA 0");
       return 0;
     }
 
@@ -306,10 +306,14 @@ function getFullSGPA(attempts) {
         if (!!Object.keys(attempts[i]).length) {
           for (let j = 0; j < attempts[i].subjects.length; j++) {
             // console.log('checking', attempts[i].subjects[j]['Subject Name'])
+
+            //only check the starting 8 characters of subject name to avoid
+            //confusion with other subjects
+            //sometimes jutua adds a prefix to subject name
             const index = bestAttempts.findIndex(
               (sub) =>
-                sub["1"].toLowerCase() ==
-                attempts[i].subjects[j]["1"].toLowerCase()
+                sub["1"].slice(0, 8).toLowerCase() ==
+                attempts[i].subjects[j]["1"].slice(0, 8).toLowerCase()
             );
             //if found, check if grade is better
             if (index != -1) {
@@ -326,7 +330,7 @@ function getFullSGPA(attempts) {
     let totalCred = 0;
     let obtainedCred = 0;
     let flag = false;
-    // console.log('bestAttempts',bestAttempts)
+    // console.log("bestAttempts", bestAttempts);
     bestAttempts.forEach((subject) => {
       //return sgpa as 0 if any subject has credit 0
       if (
@@ -508,6 +512,7 @@ async function getFullResultFromJNTU(
               return resObj;
             }
           });
+
           // console.log('resObj', resObj)
           // console.log('before',resObj.htn, resObj.attempts[0].subjects[3])
           resolve(resObj);
@@ -532,7 +537,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
         if (err) return reject(err);
         //res doesnt exist
         if (result.length == 0) {
-          // if (true) {
+        // if (true) {
           try {
             const resFromJNTU = await getFullResultFromJNTU(
               examsList,
