@@ -76,9 +76,13 @@ app.use(
       chalk.bgRedBright("📱" + deviceInfo),
       chalk.bgMagentaBright("🔗" + tokens.url(req, res)),
       chalk.bgBlueBright(
-        tokens.referrer(req, res).includes("https://naresh-khatri.github.io")
-          ? "🧾 " + "Homepage"
-          : "🧾 " + tokens.referrer(req, res)
+        tokens.referrer(req, res)
+          ? tokens
+              .referrer(req, res)
+              .includes("https://naresh-khatri.github.io")
+            ? "🧾 " + "Homepage"
+            : "🧾 " + tokens.referrer(req, res)
+          : "🧾 " + "No Referrer"
       ),
       chalk.bgCyan("📦" + tokens.res(req, res, "content-length")),
       "⚡ " + chalk.greenBright(tokens["response-time"](req, res), "ms"),
