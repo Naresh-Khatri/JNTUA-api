@@ -22,7 +22,8 @@ const getAllResultsRows = function () {
                 resolve(resultsObj)
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
+                reject('JNTUA down 🤔')
             }).finally(() => {
                 // console.log(JSON.stringify(resultsObj, null, 2));
             })
