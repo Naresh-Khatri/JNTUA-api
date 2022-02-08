@@ -462,11 +462,16 @@ async function getFullResultFromJNTU(
     try {
       Promise.all(examsList.map((exam) => getAttempt(exam, htn, token)))
         .then(async (res) => {
+          // console.log('res', Object.keys(res[0]).length)
+          if(Object.keys(res[0]).length == 0){
+            reject('Invalid htn')
+            return
+          }
+
           //remember the issue when the promise.all was resolving
           //before the getStudName promise was resolved?
           // this is a hack to fix it
           // we take the first attempt and get the stud name
-          // console.log('res', res)
           const attempts = [];
           let studName = "";
           studAbsent = true;
@@ -547,6 +552,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
             );
             resolve(resFromJNTU);
           } catch (err) {
+            reject(err);
             return err;
           }
         }
@@ -671,7 +677,7 @@ function getFullResult(data) {
         }
       } catch (err) {
         console.log(err);
-        reject("sigh! 😔 no results");
+        reject(err);
       }
     });
   });
