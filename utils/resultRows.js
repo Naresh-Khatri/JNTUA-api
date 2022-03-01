@@ -58,6 +58,13 @@ const filteredResultsRows = function (data) {
 
 }
 function getResultInfoObj(str, resultID) {
+    //regex to detect regulation 'R19', 'R20', 'R21', 'R22'
+    //return if regulation is not found which results in null key
+    const regulationRegex = /R\d\d/
+    if(!str.match(regulationRegex)){
+        console.log(str)
+        return
+    } 
     const obj = {}
     var regulationRegExp = /\((R[^)]+)\)/;
     try {
