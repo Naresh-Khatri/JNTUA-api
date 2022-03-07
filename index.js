@@ -82,7 +82,7 @@ app.use(
               .includes("https://naresh-khatri.github.io")
             ? "🧾 " + "Homepage"
             : "🧾 " + tokens.referrer(req, res)
-          : "🧾 " + "No Referrer"
+          : "🧾 " + "NA"
       ),
       chalk.bgCyan("📦" + tokens.res(req, res, "content-length")),
       "⚡ " + chalk.greenBright(tokens["response-time"](req, res), "ms"),
