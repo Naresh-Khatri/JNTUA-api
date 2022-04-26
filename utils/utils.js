@@ -1,19 +1,20 @@
-const fs = require("fs");
-const JSSoup = require("jssoup").default;
-const axios = require("axios");
-const HtmlTableToJson = require("html-table-to-json");
-const Result = require("../models/Result");
-const FullResult = require("../models/FullResult");
-const Analytics = require("../models/Analytics");
-const Search = require("../models/Search");
+import fs from "fs";
+import JSSoupPkg from "jssoup";
+import axios from "axios";
+import HtmlTableToJson from "html-table-to-json";
+import Result from "../models/Result.js";
+import FullResult from "../models/FullResult.js";
+import Analytics from "../models/Analytics.js";
+import Search from "../models/Search.js";
 
-const rollsArr = require("./rolls");
+import rollsArr from "./rolls.js";
+const JSSoup = JSSoupPkg.default;
 
 function getToken() {
   return new Promise((resolve, reject) => {
     var config = {
       method: "get",
-      url: "https://jntuaresults.ac.in/view-results-56736424.html",
+      url: "https://jntuaresults.ac.in/view-results-56736665.html",
       headers: {
         Cookie: "PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;",
       },
@@ -463,9 +464,9 @@ async function getFullResultFromJNTU(
       Promise.all(examsList.map((exam) => getAttempt(exam, htn, token)))
         .then(async (res) => {
           // console.log('res', Object.keys(res[0]).length)
-          if(Object.keys(res[0]).length == 0){
-            reject('Invalid htn')
-            return
+          if (Object.keys(res[0]).length == 0) {
+            reject("Invalid htn");
+            return;
           }
 
           //remember the issue when the promise.all was resolving
@@ -542,7 +543,7 @@ function getFullResultFromDB(examsList, htn, token, resInfo) {
         if (err) return reject(err);
         //res doesnt exist
         if (result.length == 0) {
-        // if (true) {
+          // if (true) {
           try {
             const resFromJNTU = await getFullResultFromJNTU(
               examsList,
@@ -808,7 +809,7 @@ const monthNames = [
   "Dec",
 ];
 
-module.exports = {
+export {
   getToken,
   parseInt,
   addAnalytics,

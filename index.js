@@ -1,32 +1,30 @@
-require("dotenv/config");
-const express = require("express");
-const axios = require("axios");
-const morgan = require("morgan");
-const mongoose = require("mongoose");
-const chalk = require("chalk");
+import "dotenv/config";
+import express from "express";
+import axios from "axios";
+import morgan from "morgan";
+import mongoose from "mongoose";
+import chalk from "chalk";
 
 //models
-const Result = require("./models/Result");
-const Feedback = require("./models/Feedback");
-const Share = require("./models/Share");
-const Analytics = require("./models/Analytics");
-const Rating = require("./models/Rating");
+import Result from "./models/Result.js";
+import Feedback from "./models/Feedback.js";
+import Share from "./models/Share.js";
+import Rating from "./models/Rating.js";
 
-const stats = require("./routes/stats");
+import stats from "./routes/stats.js";
 // const morganLogger = require("./utils/morganLogger");
 
-const {
+import {
   getToken,
   convert2obj,
   getResultIDDetails,
   getFullResult,
   getFullBatchResults,
-  addAnalytics,
-} = require("./utils/utils.js");
-const {
+} from "./utils/utils.js";
+import {
   updateReleasedResJSON,
   getReleasedResJSON,
-} = require("./utils/releasedResManager");
+} from "./utils/releasedResManager.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -94,14 +92,15 @@ app.use(express.json());
 app.use("/stats", stats);
 
 //update releasedRes.json every 1 min
-updateReleasedResJSON();
+// updateReleasedResJSON();
 setInterval(() => {
-  updateReleasedResJSON();
+  // updateReleasedResJSON();
 }, 60 * 1000);
 
 //get token initially
+
 getToken().then((res) => {
-  token = res;
+  const token = res;
   console.log("token updated! -", token);
 });
 setInterval(async () => {
@@ -205,27 +204,6 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
-async function getBatchResult(resultID, prefix, start, end) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      //check if result exist in db first
-      let resultList = [];
-      for (let i = start; i < end; i++) {
-        try {
-          resultList.push(
-            await getResultFromDB(resultID, prefix + (i < 10 ? `0${i}` : i))
-          );
-          //console.log(resultList)
-        } catch (err) {
-          console.log(err);
-        }
-      }
-      resolve(resultList);
-    } catch (err) {
-      reject(err);
-    }
-  });
-}
 async function getBatchResult(resultID, prefix, start, end) {
   return new Promise(async (resolve, reject) => {
     try {

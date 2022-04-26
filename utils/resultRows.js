@@ -1,6 +1,8 @@
-const JSSoup = require("jssoup").default;
-const { parseInt } = require("./utils");
-const axios = require("axios");
+import JSSoupPkg from "jssoup";
+const JSSoup = JSSoupPkg.default;
+
+import { parseInt } from "./utils.js";
+import axios from "axios";
 
 let resultsObj = {};
 
@@ -134,4 +136,4 @@ function getResultInfoObj(str, resultID) {
   }
 }
 
-module.exports = { getAllResultsRows };
+export default getAllResultsRows 

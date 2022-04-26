@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const FeedbackSchema = mongoose.Schema({
     email: String,
@@ -10,4 +10,4 @@ const FeedbackSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Feedback', FeedbackSchema)
+export default  mongoose.model('Feedback', FeedbackSchema)

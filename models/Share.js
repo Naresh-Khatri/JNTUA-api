@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from  'mongoose'
 const shareSchema = mongoose.Schema({
     resultID: String,
     htns: Array,
@@ -10,4 +10,4 @@ const shareSchema = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('Share', shareSchema)
+export default mongoose.model('Share', shareSchema)

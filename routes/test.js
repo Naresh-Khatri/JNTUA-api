@@ -1,13 +1,13 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const Result = require('../models/Result')
-const Feedback = require('../models/Feedback')
-const Share = require('../models/Share')
-const Analytics = require('../models/Analytics')
+import Result  from '../models/Result.js'
+import Feedback  from '../models/Feedback.js'
+import Share  from '../models/Share.js'
+import Analytics  from '../models/Analytics.js'
 
-const { monthNames } = require('../utils/utils')
+import { monthNames } from'../utils/utils.js'
 
-const collegesInfo = require('../collegeInfo.json')
+import collegesInfo from '../collegeInfo.json'
 
 router.get('/public', async (req, res) => {
   try {
@@ -19,4 +19,4 @@ router.get('/public', async (req, res) => {
 })
 
 
-module.exports = router
+export default router

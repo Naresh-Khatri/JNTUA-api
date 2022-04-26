@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose  from 'mongoose'
 const AnalyticsSchema = mongoose.Schema({
     htn: String,
     resultID: String,
@@ -6,4 +6,4 @@ const AnalyticsSchema = mongoose.Schema({
     count: Number,
     collegeCode: String,
 })
-module.exports = mongoose.model('Analytics', AnalyticsSchema)
+export default  mongoose.model('Analytics', AnalyticsSchema)

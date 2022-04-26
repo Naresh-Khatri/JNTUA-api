@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose  from 'mongoose'
 const RatingSchema = mongoose.Schema({
     time: {
         default: Date
@@ -7,4 +7,4 @@ const RatingSchema = mongoose.Schema({
     searchRoll: String,
     collegeCode: String,
 })
-module.exports = mongoose.model('Rating', RatingSchema)
+export default mongoose.model('Rating', RatingSchema)

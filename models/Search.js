@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 const SearchSchema = mongoose.Schema({
     date: Date,
     time: Array,
@@ -8,4 +8,4 @@ const SearchSchema = mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("Search", SearchSchema);
+export default mongoose.model("Search", SearchSchema);
