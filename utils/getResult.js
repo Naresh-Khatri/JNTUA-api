@@ -27,7 +27,7 @@ export default function getFullResult(params) {
           examsList.reverse();
           //checks all resultIDs
           //examsList is obj of resultID and label, resInfo to help identify each result in db
-          const res = await getFullResultFromDB(examsList, params.htn, resInfo);
+          const res = getFullResultFromDB(examsList, params.htn, resInfo);
           // res.attempts.map(attempt => console.log('attempt', attempt.subjects))
           resolve(res);
           // examsList.map(row => console.log(row.title))
@@ -43,16 +43,16 @@ export default function getFullResult(params) {
 export async function getFullResultFromDB(examsList, htn, resInfo) {
   //   return new Promise((resolve, reject) => {
   try {
-    const result = await FullResult.find({
+    const result = await FullResult.findOne({
       $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }],
     });
 
     // console.log("fetching from db", result);
     //if db doesn't have the result get it from JNTUA
     // if (true) {
-    if (result.length == 0) {
+    if (!result) {
       try {
-        console.log("no result found in db");
+        // console.log("no result found in db");
         const resFromJNTU = await getFullResultFromJNTU(
           examsList,
           htn,
@@ -65,56 +65,61 @@ export async function getFullResultFromDB(examsList, htn, resInfo) {
     } else {
       try {
         //check if student failed
-        if (result[0].sgpa <= 0 || result[0].attempts.include(null)) {
+        // || result.attempts.include(null)
+        if (result.sgpa <= 0) {
           // let oldViewCount = result[0].viewCount;
           // console.log(htn, 'failed, recalculating')
           // if failed then get all the attempts from JNTUA and update that in db
-          Promise.all(examsList.map((exam) => getAttempt(exam, htn))).then(
-            (attemptsRes) => {
-              const attempts = [];
-              // let studAbsent = true;
-              // console.log('attempts', attemptsRes)
-              for (let i = 0; i < attemptsRes.length; i++) {
-                if (!attemptsRes[i] || attemptsRes[i].length == 0) {
-                  continue;
+          const attemptsRes = await Promise.all(
+            examsList.map((exam) => getAttempt(exam, htn))
+          );
+          const attempts = [];
+          // let studAbsent = true;
+          // console.log('attempts', attemptsRes)
+          for (let i = 0; i < attemptsRes.length; i++) {
+            if (!attemptsRes[i] || attemptsRes[i].length == 0) {
+              continue;
+            }
+            attempts.push(attemptsRes[i].resultObj);
+            // studAbsent = false;
+          }
+          // console.log("attemptsRes[i]", attempts)
+          // console.log("resObj", resObj);
+          const resObj = {};
+          //initialize with resInfo
+          resObj["attempts"] = attempts;
+          //JNTUA fucking piece of shit!
+          //res table is completely messed up sometimes
+          //so calculated sgpa maybe NaN
+          const sgpa = getFullSGPA(resObj["attempts"]);
+          resObj["sgpa"] = !isNaN(sgpa) ? sgpa : 0;
+
+          // console.log("resobj", resObj);
+          FullResult.findOneAndUpdate(
+            { htn: htn, year: resInfo.year, sem: resInfo.sem },
+            resObj,
+            { new: true, useFindAndModify: false },
+            (err, res) => {
+              if (err) console.log(err);
+              else {
+                // console.log(res)
+                if (examsList) {
+                  // examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
                 }
-                attempts.push(attemptsRes[i].resultObj);
-                // studAbsent = false;
+                return res; //add anal iff examsList is not undefined
               }
-              // console.log("attemptsRes[i]", attempts)
-              // console.log("resObj", resObj);
-              const resObj = {};
-              //initialize with resInfo
-              resObj["attempts"] = attempts;
-              resObj["sgpa"] = getFullSGPA(resObj["attempts"]);
-              // console.log("resobj", resObj);
-              FullResult.findOneAndUpdate(
-                { htn: htn, year: resInfo.year, sem: resInfo.sem },
-                resObj,
-                { new: true, useFindAndModify: false },
-                (err, res) => {
-                  if (err) console.log(err);
-                  else {
-                    // console.log(res)
-                    if (examsList) {
-                      examsList.forEach((exam) =>
-                        addAnalytics(exam.resultID, htn)
-                      );
-                    }
-                    return res; //add anal iff examsList is not undefined
-                  }
-                }
-              );
             }
           );
         }
+        // console.log("sldfsdf");
+
         // update viewCount and lastViewed
         FullResult.findOneAndUpdate(
           {
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }],
           },
           {
-            viewCount: result[0].viewCount + 1,
+            viewCount: result.viewCount + 1,
           },
           { useFindAndModify: false },
           (err) => {
@@ -127,9 +132,10 @@ export async function getFullResultFromDB(examsList, htn, resInfo) {
         // console.log('resssssssssssssss',result[0].viewCount)
         //add anal iff examsList is not undefined
         if (examsList) {
-          examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
+          // examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
         }
-        return result[0];
+        // console.log(result);
+        return result;
       } catch (err) {
         return err;
       }
@@ -143,19 +149,16 @@ export async function getFullResultFromDB(examsList, htn, resInfo) {
 async function getFullResultFromJNTU(examsList, htn, resInfo) {
   return new Promise((resolve, reject) => {
     try {
-      console.log("gonna search for", examsList);
-      Promise.all(
-        examsList.map((exam) => getAttempt(exam, htn, process.env.ACCESS_TOKEN))
-      )
+      // console.log("gonna search for", examsList);
+      Promise.all(examsList.map((exam) => getAttempt(exam, htn)))
         .then((res) => {
-          //   console.log("res", res);
+          // console.log(res);
+          // if(studentDropped(res)){
+          //   return
           if (Object.keys(res[0]).length == 0) {
-            return "Invalid htn";
+            return resolve({});
           }
-          //remember the issue when the promise.all was resolving
-          //before the getStudName promise was resolved?
-          // this is a hack to fix it
-          // we take the first attempt and get the stud name
+
           const attempts = [];
           let studName = "";
           let studAbsent = true;
@@ -172,7 +175,7 @@ async function getFullResultFromJNTU(examsList, htn, resInfo) {
           }
           // attempts.map(attempt => console.log('attempt', attempt.subjects))
           // console.log('stud abs', studAbsent)
-          // console.log(attempts)
+          console.log(attempts);
 
           const resObj = { ...resInfo };
           //initialize with resInfo
