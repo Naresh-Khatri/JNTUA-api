@@ -104,7 +104,7 @@ export async function getFullResultFromDB(examsList, htn, resInfo) {
               else {
                 // console.log(res)
                 if (examsList) {
-                  // examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
+                  examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
                 }
                 return res; //add anal iff examsList is not undefined
               }
@@ -132,7 +132,7 @@ export async function getFullResultFromDB(examsList, htn, resInfo) {
         // console.log('resssssssssssssss',result[0].viewCount)
         //add anal iff examsList is not undefined
         if (examsList) {
-          // examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
+          examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
         }
         // console.log(result);
         return result;
