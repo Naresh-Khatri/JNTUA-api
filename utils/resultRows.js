@@ -30,7 +30,7 @@ const getAllResultsRows = function () {
         resolve(resultsObj);
       })
       .catch((err) => {
-        // console.log(err)
+        console.log(err);
         reject("JNTUA down 🤔");
       })
       .finally(() => {
@@ -39,45 +39,51 @@ const getAllResultsRows = function () {
   });
 };
 // returns filtered rows
-const filteredResultsRows = function (data) {
-  let resultsObj = {};
-  return new Promise((resolve, reject) => {
-    axios
-      .get("https://jntuaresults.ac.in/index.php")
-      .then((res) => {
-        const soup = new JSSoup(res.data);
-        //get content of 2nd table
-        //jntua is fucking insane for adding the first table for
-        //no fucking reason, else would have used find() instead
-        const table = soup.findAll("table")[1];
-        const tr = table.findAll("tr");
-        const resultRows = [];
-        resultsObj = {};
-        for (let i = 1; i < 400; i++) {
-          resultRows.push(
-            getResultInfoObj(
-              tr[i].find("a").nextElement._text,
-              tr[i].find("a").attrs.href
-            )
-          );
-        }
-        resolve(resultsObj);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        // console.log(JSON.stringify(resultsObj, null, 2));
-      });
-  });
-};
+// const filteredResultsRows = function (data) {
+//   let resultsObj = {};
+//   return new Promise((resolve, reject) => {
+//     axios
+//       .get("https://jntuaresults.ac.in/index.php")
+//       .then((res) => {
+//         const soup = new JSSoup(res.data);
+//         //get content of 2nd table
+//         //jntua is fucking insane for adding the first table for
+//         //no fucking reason, else would have used find() instead
+//         const table = soup.findAll("table")[1];
+//         const tr = table.findAll("tr");
+//         const resultRows = [];
+//         resultsObj = {};
+//         for (let i = 1; i < 400; i++) {
+//           resultRows.push(
+//             getResultInfoObj(
+//               tr[i].find("a").nextElement._text,
+//               tr[i].find("a").attrs.href
+//             )
+//           );
+//         }
+//         resolve(resultsObj);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       })
+//       .finally(() => {
+//         // console.log(JSON.stringify(resultsObj, null, 2));
+//       });
+//   });
+// };
 function getResultInfoObj(str, resultID) {
   //regex to detect regulation presence 'R19', 'R20', 'R21', 'R22'
   //return if regulation is not found which results in null key
   const regulationRegexp = /R\d\d/;
   if (!str.match(regulationRegexp)) return;
 
+  let year = "";
+  let sem = "";
+  let reg = "";
+  let course = "";
+
   const obj = {};
+
   var regulationRegExp = /\((R[^)]+)\)/;
   if (!str.match(regulationRegExp)) {
     console.log("2", str);
@@ -90,8 +96,8 @@ function getResultInfoObj(str, resultID) {
     }
     const splitString = str.toUpperCase().split(" ");
 
-    title = obj["title"] = str;
-    reg = obj["reg"] = !!regulationRegExp.exec(str)
+    const title = (obj["title"] = str);
+    reg = obj["reg"] = regulationRegExp.exec(str)
       ? regulationRegExp.exec(str)[1]
       : null;
     year = obj["year"] = splitString[splitString.indexOf("YEAR") - 1] || null;
@@ -132,8 +138,9 @@ function getResultInfoObj(str, resultID) {
     return obj;
   } catch (err) {
     console.log("Cant parse table from jntua homepage!");
+    console.log(err);
     return;
   }
 }
 
-export default getAllResultsRows 
+export default getAllResultsRows;

@@ -2,10 +2,11 @@ import fs from "fs";
 import JSSoupPkg from "jssoup";
 import axios from "axios";
 import HtmlTableToJson from "html-table-to-json";
-import Result from "../models/Result.js";
 import FullResult from "../models/FullResult.js";
 import Analytics from "../models/Analytics.js";
 import Search from "../models/Search.js";
+// import Result from '../models/Result.js'
+import getAttempt from "./getAttempts.js";
 
 import rollsArr from "./rolls.js";
 const JSSoup = JSSoupPkg.default;
@@ -28,6 +29,7 @@ function getToken() {
             pageHTML.indexOf("access") + 30
           )
         );
+        process.env.ACCESS_TOKEN = token;
         resolve(token);
       })
       .catch((err) => reject(err));
@@ -59,101 +61,106 @@ function convert2obj(tableHTML, resultID) {
   const subjects = jsonTable[0];
   const sgpa = getSGPA(subjects);
   const failedCount = getFailedCount(subjects);
-  Object.assign(resultObj, { resultID, failedCount, sgpa, subjects });
 
-  return resultObj;
+  return { ...resultObj, resultID, failedCount, sgpa, subjects };
 }
-function formateDate(date) {
-  return (
-    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-  );
-}
-async function addAnalytics(resultID, htn) {
-  try {
-    Analytics.findOneAndUpdate(
-      { htn, resultID },
-      {
-        $inc: { count: 1 },
-        latest: new Date(
-          new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
-        ).toUTCString(),
-      },
-      { new: true, useFindAndModify: false }
-    )
-      .then((result, err) => {
-        //increase count, update time and save
-        //result is null if no result found
-        if (!result) {
-          //add new entry with count=1, current time and save
-          const anal = new Analytics({
-            htn,
-            resultID,
-            count: 1,
-            latest: new Date(
-              new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
-            ).toUTCString(),
-          });
-          anal.save();
-        }
-      })
-      .catch((err) => {
-        console.log(`Error: Couldnt add anal for ${htn} - ${resultID}:${err}`);
-      });
+// function formateDate(date) {
+//   return (
+//     date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+//   );
+// }
+// async function addAnalytics(resultID, htn) {
+//   try {
+//     Analytics.findOneAndUpdate(
+//       { htn, resultID },
+//       {
+//         $inc: { count: 1 },
+//         latest: new Date(
+//           new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
+//         ).toUTCString(),
+//       },
+//       { new: true, useFindAndModify: false }
+//     )
+//       .then(
+//         (
+//           result
+//           //  err
+//         ) => {
+//           //increase count, update time and save
+//           //result is null if no result found
+//           if (!result) {
+//             //add new entry with count=1, current time and save
+//             const anal = new Analytics({
+//               htn,
+//               resultID,
+//               count: 1,
+//               latest: new Date(
+//                 new Date().getTime() -
+//                   new Date().getTimezoneOffset() * 60 * 1000
+//               ).toUTCString(),
+//             });
+//             anal.save();
+//           }
+//         }
+//       )
+//       .catch((err) => {
+//         console.log(`Error: Couldnt add anal for ${htn} - ${resultID}:${err}`);
+//       });
 
-    //increase the search count for the day
-    let date = formateDate(new Date());
+//     //increase the search count for the day
+//     let date = formateDate(new Date());
 
-    let currTime = new Date(
-      new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
-    );
-    // let formattedTime = currTime.getHours().length == 1 ? "0" + currTime.getHours() : currTime.getHours() + ":"
-    // currTime.getMinutes().length == 1 ? "0" + currTime.getMinutes() : currTime.getMinutes() + ":"
-    // currTime.getSeconds().length == 1 ? "0" + currTime.getSeconds() : currTime.getSeconds()
+//     // let currTime = new Date(
+//     //   new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
+//     // );
+//     // let formattedTime = currTime.getHours().length == 1 ? "0" + currTime.getHours() : currTime.getHours() + ":"
+//     // currTime.getMinutes().length == 1 ? "0" + currTime.getMinutes() : currTime.getMinutes() + ":"
+//     // currTime.getSeconds().length == 1 ? "0" + currTime.getSeconds() : currTime.getSeconds()
 
-    Search.findOneAndUpdate(
-      { date: date },
-      {
-        $inc: { searchCount: 1 },
-        // $push: { time: currTime }
-      },
-      { new: true, useFindAndModify: false }
-    )
-      .then((result) => {
-        // console.log(result)
-        // result is null if no result found
-        if (!result) {
-          console.log("New date! adding new record in search");
-          const search = new Search({
-            date: date,
-            count: 1,
-            // time: [new Date().getHours()],
-          });
-          search.save().then((result) => {
-            console.log("search added:", result);
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("Error:", err);
-      });
+//     Search.findOneAndUpdate(
+//       { date: date },
+//       {
+//         $inc: { searchCount: 1 },
+//         // $push: { time: currTime }
+//       },
+//       { new: true, useFindAndModify: false }
+//     )
+//       .then((result) => {
+//         // console.log(result)
+//         // result is null if no result found
+//         if (!result) {
+//           console.log("New date! adding new record in search");
+//           const search = new Search({
+//             date: date,
+//             count: 1,
+//             // time: [new Date().getHours()],
+//           });
+//           search.save().then((result) => {
+//             console.log("search added:", result);
+//           });
+//         }
+//       })
+//       .catch((err) => {
+//         console.log("Error:", err);
+//       });
 
-    // if (err) {
-    //     console.log('while updating searches', err)
-    // }
-    // else {
-    //     if (result.length == 0) {
-    //         // const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
-    //         // search.save()
-    //         //     .then(result => {
-    //         //         console.log('search added:', result)
-    //         //     })
-    //     }
-    // }
-    // })}
-  } catch (err) {
-    console.log(err);
-  }
-}
+//     // if (err) {
+//     //     console.log('while updating searches', err)
+//     // }
+//     // else {
+//     //     if (result.length == 0) {
+//     //         // const search = new Search({ date: date, count: 1, time: [new Date().getHours()] })
+//     //         // search.save()
+//     //         //     .then(result => {
+//     //         //         console.log('search added:', result)
+//     //         //     })
+//     //     }
+//     // }
+//     // })}
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
 
 function getSGPA(subjects) {
   let G2GP = {
@@ -200,7 +207,7 @@ function getSGPA(subjects) {
 }
 function getFailedCount(subjects) {
   let count = 0;
-  if (!!!subjects) return 0;
+  if (!subjects) return 0;
   subjects.forEach((sub) => {
     if ((sub.Credits == 0 && sub.Grade == "F") || sub.Grade == "AB") {
       count++;
@@ -220,24 +227,36 @@ function getResultFromJNTU(resultID, htn) {
     axios(config)
       .then(async (res) => {
         if (res.data == "Something goes wrong") {
-          // console.log(res.data)
-          token = await getToken();
-          return reject("Something goes wrong");
+          console.log(res.data);
+          await getToken();
+          return reject("Token updated please reload");
         }
         //check if token is expired
         if (res.data == "Invalid Token") {
           console.log("token expired");
-          token = await getToken();
+          await getToken();
           return reject("Token updated please reload");
         }
         //reject if result not found
-        if (res.data.includes("Invalid")) {
-          return reject("Result not found!");
+        if (res.data.includes("Invalid Hall Ticket Number")) {
+          //removing <b> tag
+          return reject(res.data.replace(/<\/?[^>]+(>|$)/g, ""));
         }
         let tableHTML = res.data + "</th></tr></table>";
-        //jntua is a fucking peice of shit for not adding these closing
+        //jntua is a fucking peice of shit for not adding these closings
         //such a pain
         const resultObj = convert2obj(tableHTML, resultID);
+
+        const result = new Result(resultObj);
+        result
+          .save()
+          .then(async (data) => {
+            // console.log(data)
+            resolve(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         resolve(resultObj);
       })
       .catch((err) => {
@@ -246,6 +265,7 @@ function getResultFromJNTU(resultID, htn) {
       });
   });
 }
+
 function getResultFromDB(resultID, htn) {
   return new Promise((resolve, reject) => {
     Result.find(
@@ -304,7 +324,7 @@ function getFullSGPA(attempts) {
     if (attempts.length > 1) {
       for (let i = 1; i < attempts.length; i++) {
         //only check if stud attempted and this obj is not empty
-        if (!!Object.keys(attempts[i]).length) {
+        if (Object.keys(attempts[i]).length) {
           for (let j = 0; j < attempts[i].subjects.length; j++) {
             // console.log('checking', attempts[i].subjects[j]['Subject Name'])
 
@@ -380,7 +400,7 @@ function getAllAttemptsObj(tableHTML, result) {
   const monthArr = splitArr.slice(-2);
   monthArr[0] = monthArr[0].slice(0, 3);
   monthArr[1] = monthArr[1].slice(-2);
-  month = monthArr.join("-");
+  let month = monthArr.join("-");
   subjects.forEach((sub) =>
     Object.assign(sub, { resultID: result.resultID, month })
   );
@@ -396,252 +416,182 @@ function getAllAttemptsObj(tableHTML, result) {
 
   const failedCount = getFailedCount(subjects);
   const attempt = {};
-  Object.assign(attempt, { failedCount, subjects, resultID: result.resultID });
-  return attempt;
+
+  return { ...attempt, failedCount, subjects, resultID: result.resultID };
 }
-function getAttempt(result, htn, token) {
-  // console.log('token', token)
-  return new Promise(async (resolve, reject) => {
-    var config = {
-      method: "get",
-      url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${result.resultID}&accessToken=${token}`,
-      headers: {
-        Cookie: "PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;",
-      },
-    };
-    axios(config)
+
+async function getFullResultFromJNTU(examsList, htn, resInfo, oldViewCount) {
+  try {
+    Promise.all(
+      examsList.map((exam) => getAttempt(exam, htn))
+    )
       .then(async (res) => {
-        // console.log("url",config.url)
-        // console.log("result",result)
-        // console.log("res.data",res.data)
-
-        if (res.data == "Something goes wrong 😟") {
-          console.log(res.data);
-          reject("Something goes wrong 😟");
-          return;
-        }
-        //check if token is expired
-        if (res.data == "Invalid Token") {
-          console.log("token expired");
-          reject("Token updated please reload");
-          return;
-        }
-        //reject if result not found
-        if (res.data.includes("Invalid")) {
-          // console.log(`Invalid htn=${htn} with resid=${result.resultID}`)
-          return resolve({});
+        console.log("res", res);
+        if (Object.keys(res[0]).length == 0) {
+          return "Invalid htn";
         }
 
-        //get stud name in all attempts
-        let studInfo = res.data
-          .substring(0, res.data.indexOf("<br>"))
-          .replace(/&nbsp;|<\/?[^>]+(>|$)|Hall Ticket No :|Student name:/g, "")
-          .split(" ");
-        studInfo.shift();
-        const studName = studInfo.join(" ");
+        //remember the issue when the promise.all was resolving
+        //before the getStudName promise was resolved?
+        // this is a hack to fix it
+        // we take the first attempt and get the stud name
+        const attempts = [];
+        let studName = "";
+        let studAbsent = true;
+        // res.map(attempt => console.log('attempt', attempt))
 
-        let tableHTML = res.data + "</th></tr></table>";
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].resultObj == undefined) {
+            attempts.push({});
+            continue;
+          }
+          attempts.push(res[i].resultObj);
+          studName = res[i].studName;
+          studAbsent = false;
+        }
+        // attempts.map(attempt => console.log('attempt', attempt.subjects))
+        // console.log('stud abs', studAbsent)
+        // console.log(attempts)
 
-        //jntua is a fucking piece of shit for not adding these closing tags
-        //such a pain
-        const resultObj = getAllAttemptsObj(tableHTML, result);
-        resolve({ resultObj, studName });
+        const resObj = {};
+        //initialize with resInfo
+        Object.assign(resObj, resInfo);
+        resObj["attempts"] = attempts;
+        if (studAbsent || resObj["attempts"] == undefined) {
+          // console.log('stud absent')
+          return {};
+        }
+        resObj["name"] = studName;
+        resObj["collegeCode"] = htn.slice(2, 4);
+        resObj["viewCount"] = oldViewCount + 1 || 1;
+        resObj["lastViewed"] = new Date(
+          new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
+        ).toUTCString();
+        resObj["htn"] = htn;
+        // resObj.attempts.map(attempt => console.log('attempt', attempt.subjects))
+        const sgpa = getFullSGPA(resObj["attempts"]);
+        resObj["sgpa"] = sgpa;
+        const fullResult = new FullResult(resObj);
+
+        fullResult.save((err) => {
+          if (err) console.log(err);
+          else {
+            // console.log(res)
+            return resObj;
+          }
+        });
+
+        // console.log('resObj', resObj)
+        // console.log('before',resObj.htn, resObj.attempts[0].subjects[3])
+        return resObj;
       })
       .catch((err) => {
         console.log(err);
+        return err;
       });
-  });
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
 }
-async function getFullResultFromJNTU(
-  examsList,
-  htn,
-  token,
-  resInfo,
-  oldViewCount
-) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      Promise.all(examsList.map((exam) => getAttempt(exam, htn, token)))
-        .then(async (res) => {
-          // console.log('res', Object.keys(res[0]).length)
-          if (Object.keys(res[0]).length == 0) {
-            reject("Invalid htn");
-            return;
-          }
+async function getFullResultFromDB(examsList, htn, resInfo) {
+  // console.log(info)
+  try {
+    const result = await FullResult.find({
+      $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }],
+    });
 
-          //remember the issue when the promise.all was resolving
-          //before the getStudName promise was resolved?
-          // this is a hack to fix it
-          // we take the first attempt and get the stud name
-          const attempts = [];
-          let studName = "";
-          studAbsent = true;
-          // res.map(attempt => console.log('attempt', attempt))
-
-          for (let i = 0; i < res.length; i++) {
-            if (res[i].resultObj == undefined) {
-              attempts.push({});
-              continue;
+    if (result.length == 0) {
+      // if (true) {
+      try {
+        const resFromJNTU = await getFullResultFromJNTU(
+          examsList,
+          htn,
+          resInfo
+        );
+        return resFromJNTU;
+      } catch (err) {
+        return err;
+      }
+    } else {
+      try {
+        //check if student failed
+        if (result[0].sgpa <= 0) {
+          // let oldViewCount = result[0].viewCount;
+          // console.log(htn, 'failed, recalculating')
+          // if failed then get all the attempts from JNTUA and update that in db
+          Promise.all(
+            examsList.map((exam) =>
+              getAttempt(exam, htn)
+            )
+          ).then((res) => {
+            const attempts = [];
+            // let studAbsent = true;
+            for (let i = 0; i < res.length; i++) {
+              if (res[i].resultObj == undefined) {
+                attempts.push({});
+                continue;
+              }
+              attempts.push(res[i].resultObj);
+              // studAbsent = false;
             }
-            attempts.push(res[i].resultObj);
-            studName = res[i].studName;
-            studAbsent = false;
-          }
-          // attempts.map(attempt => console.log('attempt', attempt.subjects))
-          // console.log('stud abs', studAbsent)
-          // console.log(attempts)
-
-          resObj = {};
-          //initialize with resInfo
-          Object.assign(resObj, resInfo);
-          resObj["attempts"] = attempts;
-          if (studAbsent || resObj["attempts"] == undefined) {
-            // console.log('stud absent')
-            return resolve({});
-          }
-          resObj["name"] = studName;
-          resObj["collegeCode"] = htn.slice(2, 4);
-          resObj["viewCount"] = oldViewCount + 1 || 1;
-          resObj["lastViewed"] = new Date(
-            new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
-          ).toUTCString();
-          resObj["htn"] = htn;
-          // resObj.attempts.map(attempt => console.log('attempt', attempt.subjects))
-          const sgpa = getFullSGPA(resObj["attempts"]);
-          resObj["sgpa"] = sgpa;
-          const fullResult = new FullResult(resObj);
-
-          fullResult.save((err, res) => {
-            if (err) console.log(err);
-            else {
-              // console.log(res)
-              return resObj;
-            }
-          });
-
-          // console.log('resObj', resObj)
-          // console.log('before',resObj.htn, resObj.attempts[0].subjects[3])
-          resolve(resObj);
-        })
-        .catch((err) => {
-          console.log(err);
-          reject(err);
-        });
-    } catch (err) {
-      console.log(err);
-      reject(err);
-    }
-  });
-}
-function getFullResultFromDB(examsList, htn, token, resInfo) {
-  return new Promise(async (resolve, reject) => {
-    FullResult.find(
-      {
-        $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }],
-      },
-      async (err, result) => {
-        if (err) return reject(err);
-        //res doesnt exist
-        if (result.length == 0) {
-          // if (true) {
-          try {
-            const resFromJNTU = await getFullResultFromJNTU(
-              examsList,
-              htn,
-              token,
-              resInfo
-            );
-            resolve(resFromJNTU);
-          } catch (err) {
-            reject(err);
-            return err;
-          }
-        }
-        //fetched from db
-        else {
-          try {
-            //check if student failed
-            if (result[0].sgpa <= 0) {
-              let oldViewCount = result[0].viewCount;
-              // console.log(htn, 'failed, recalculating')
-              // if failed then get all the attempts from JNTUA and update that in db
-              Promise.all(
-                examsList.map((exam) => getAttempt(exam, htn, token))
-              ).then((res) => {
-                const attempts = [];
-                studAbsent = true;
-                for (let i = 0; i < res.length; i++) {
-                  if (res[i].resultObj == undefined) {
-                    attempts.push({});
-                    continue;
-                  }
-                  attempts.push(res[i].resultObj);
-                  studAbsent = false;
-                }
-                resObj = {};
-                //initialize with resInfo
-                resObj["attempts"] = attempts;
-                resObj["sgpa"] = getFullSGPA(resObj["attempts"]);
-                // console.log('resobj', resObj)
-                FullResult.findOneAndUpdate(
-                  { htn: htn, year: resInfo.year, sem: resInfo.sem },
-                  resObj,
-                  { new: true, useFindAndModify: false },
-                  (err, res) => {
-                    if (err) console.log(err);
-                    else {
-                      // console.log(res)
-                      resolve(res);
-                      //add anal iff examsList is not undefined
-                      if (!!examsList) {
-                        examsList.forEach((exam) =>
-                          addAnalytics(exam.resultID, htn)
-                        );
-                      }
-                      return;
-                    }
-                  }
-                );
-              });
-            }
-            // update viewCount and lastViewed
+            const resObj = {};
+            //initialize with resInfo
+            resObj["attempts"] = attempts;
+            resObj["sgpa"] = getFullSGPA(resObj["attempts"]);
+            // console.log('resobj', resObj)
             FullResult.findOneAndUpdate(
-              {
-                $and: [
-                  { htn: htn },
-                  { year: resInfo.year },
-                  { sem: resInfo.sem },
-                ],
-              },
-              {
-                viewCount: result[0].viewCount + 1,
-                lastViewed: new Date(
-                  new Date().getTime() -
-                    new Date().getTimezoneOffset() * 60 * 1000
-                ).toUTCString(),
-              },
-              { useFindAndModify: false },
-              (err, docs) => {
+              { htn: htn, year: resInfo.year, sem: resInfo.sem },
+              resObj,
+              { new: true, useFindAndModify: false },
+              (err, res) => {
                 if (err) console.log(err);
                 else {
-                  // console.log(docs)
+                  // console.log(res)
+                  if (examsList) {
+                    examsList.forEach((exam) =>
+                      addAnalytics(exam.resultID, htn)
+                    );
+                  }
+                  return res; //add anal iff examsList is not undefined
                 }
               }
             );
-            // console.log('resssssssssssssss',result[0].viewCount)
-            resolve(result[0]);
-            //add anal iff examsList is not undefined
-            if (!!examsList) {
-              examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
-            }
-            return;
-          } catch (err) {
-            return err;
-          }
+          });
         }
+        // update viewCount and lastViewed
+        FullResult.findOneAndUpdate(
+          {
+            $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }],
+          },
+          {
+            viewCount: result[0].viewCount + 1,
+            lastViewed: new Date(
+              new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000
+            ).toUTCString(),
+          },
+          { useFindAndModify: false },
+          (err) => {
+            if (err) console.log(err);
+            else {
+              // console.log(docs)
+            }
+          }
+        );
+        // console.log('resssssssssssssss',result[0].viewCount)
+        //add anal iff examsList is not undefined
+        if (examsList) {
+          examsList.forEach((exam) => addAnalytics(exam.resultID, htn));
+        }
+        return result[0];
+      } catch (err) {
+        return err;
       }
-    );
-  });
+    }
+  } catch (err) {
+    console.log("error getting res:", err);
+    return err;
+  }
 }
 
 //gets all results of stud of a sem
@@ -661,7 +611,7 @@ function getFullResult(data) {
         const examsList = JSON.parse(res)[reg][course][year][sem];
         // console.log(examsList)
 
-        resInfo = { reg, course, year, sem };
+        const resInfo = { reg, course, year, sem };
         if (examsList) {
           examsList.reverse();
           //checks all resultIDs
@@ -669,7 +619,6 @@ function getFullResult(data) {
           const res = await getFullResultFromDB(
             examsList,
             data.htn,
-            data.token,
             resInfo
           );
           // res.attempts.map(attempt => console.log('attempt', attempt.subjects))
@@ -704,8 +653,8 @@ function getFullBatchResults(data) {
           examsList.reverse();
           const rolls = [];
           console.log(data);
-          start = Number.parseInt(data.start);
-          end = Number.parseInt(data.end);
+          const start = Number.parseInt(data.start);
+          const end = Number.parseInt(data.end);
 
           for (let i = start; i <= end; i++) {
             let roll = data.rollPrefix + rollsArr[i];
@@ -714,7 +663,11 @@ function getFullBatchResults(data) {
           // console.log(rolls)
           Promise.all(
             rolls.map((roll) =>
-              getFullResultFromDB(examsList, roll, data.token, resInfo)
+              getFullResultFromDB(
+                examsList,
+                roll,
+                resInfo
+              )
             )
           )
             .then((res) => {
@@ -748,7 +701,7 @@ function getFullBatchResults(data) {
 }
 
 function getResultIDDetails(resultID) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     axios
       .get("https://jntuaresults.ac.in/index.php")
       .then((res) => {
@@ -766,7 +719,7 @@ function getResultIDDetails(resultID) {
             const splitString = str.toUpperCase().split(" ");
 
             obj["title"] = str;
-            obj["reg"] = !!regulationRegExp.exec(str)
+            obj["reg"] = regulationRegExp.exec(str)
               ? regulationRegExp.exec(str)[1]
               : null;
             obj["year"] = splitString[splitString.indexOf("YEAR") - 1] || null;
@@ -812,12 +765,12 @@ const monthNames = [
 export {
   getToken,
   parseInt,
-  addAnalytics,
+  // addAnalytics,
   convert2obj,
   getSGPA,
-  getFailedCount,
-  getResultFromJNTU,
-  getResultFromDB,
+  // getFailedCount,
+  // getResultFromJNTU,
+  // getResultFromDB,
   getFullResult,
   getFullBatchResults,
   getResultIDDetails,

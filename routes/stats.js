@@ -56,8 +56,8 @@ router.get("/public", async (req, res) => {
     console.log(searchesArr);
     // console.log(results.students)
     //create obj to store stats
-    searchCount = {};
-    searchDates = {};
+    // const searchCount = {};
+    // const searchDates = {};
     // for (let i = 0; i < results.students.length; i++) {
     //   let date = new Date(results.students[i].addedTime).getDate() + " " +
     //     monthNames[new Date(results.students[i].addedTime).getMonth()]
@@ -114,7 +114,7 @@ router.get("/new/:page", async (req, res) => {
         .limit(req.params.page * 50),
     };
     //create obj to store stats
-    searchCount = {};
+    const searchCount = {};
     for (let i = 0; i < results.students.length; i++) {
       //count searchCount for each college
       if (
@@ -167,7 +167,7 @@ router.get("/all/:page/:sortByCount", async (req, res) => {
               .limit(req.params.page * 50),
     };
     //create obj to store stats
-    searchCount = {};
+    const searchCount = {};
     for (let i = 0; i < results.students.length; i++) {
       //count searchCount for each college
       if (

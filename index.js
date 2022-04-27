@@ -1,26 +1,18 @@
 import "dotenv/config";
 import express from "express";
-import axios from "axios";
-import morgan from "morgan";
 import mongoose from "mongoose";
-import chalk from "chalk";
-
-//models
-import Result from "./models/Result.js";
-import Feedback from "./models/Feedback.js";
-import Share from "./models/Share.js";
-import Rating from "./models/Rating.js";
 
 import stats from "./routes/stats.js";
-// const morganLogger = require("./utils/morganLogger");
+import singleResultRoute from "./routes/singleResult.js";
+import batchResultRoute from "./routes/batchResult.js";
+import feedbackRoute from "./routes/feedback.js";
+import rateRoute from "./routes/rate.js";
+import shareRoute from "./routes/share.js";
 
-import {
-  getToken,
-  convert2obj,
-  getResultIDDetails,
-  getFullResult,
-  getFullBatchResults,
-} from "./utils/utils.js";
+import { getToken, getResultIDDetails } from "./utils/utils.js";
+
+import logger from "./middlewares/logger.js";
+import cors from './middlewares/allowCors.js'
 import {
   updateReleasedResJSON,
   getReleasedResJSON,
@@ -30,151 +22,40 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //allow cors
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, PUT, DELETE, OPTIONS"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, Content-Type, X-Auth-Token"
-  );
-  next();
-});
+app.use(cors)
 //custom logging morgan middleware goodness
-app.use(
-  //  morganLogger()
-  morgan(function (tokens, req, res) {
-    var parenRegExp = /\(([^)]+)\)/;
-    // let currTime = new Date(new Date(tokens.date(req, res, 'web')).getTime())
-    let currTime = new Date().toLocaleString("en-US", {
-      timeZone: "Asia/Kolkata",
-    });
-    let deviceInfo;
-    try {
-      deviceInfo = parenRegExp
-        .exec(tokens["user-agent"](req, res))[0]
-        .replace(/[()]/gi, "");
-    } catch (err) {
-      deviceInfo = tokens["user-agent"](req, res) + "dunno 🤔";
-    }
-    return [
-      "👉",
-      tokens.method(req, res) === "POST"
-        ? chalk.yellow(tokens.method(req, res))
-        : chalk.green(tokens.method(req, res)),
-      tokens.status(req, res) > 400
-        ? chalk.bgRed(tokens.status(req, res))
-        : tokens.status(req, res) > 300
-        ? chalk.bgYellow(tokens.status(req, res))
-        : chalk.bgGreen(tokens.status(req, res)),
-      // chalk.bgBlueBright('⏳' + tokens.res(req, res, 'total-time'), '-'),
-      chalk.bgBlueBright("⏰" + currTime.split(",")[1]),
-      chalk.bgRedBright("📱" + deviceInfo),
-      chalk.bgMagentaBright("🔗" + tokens.url(req, res)),
-      chalk.bgBlueBright(
-        tokens.referrer(req, res)
-          ? tokens
-              .referrer(req, res)
-              .includes("https://naresh-khatri.github.io")
-            ? "🧾 " + "Homepage"
-            : "🧾 " + tokens.referrer(req, res)
-          : "🧾 " + "NA"
-      ),
-      chalk.bgCyan("📦" + tokens.res(req, res, "content-length")),
-      "⚡ " + chalk.greenBright(tokens["response-time"](req, res), "ms"),
-    ].join(" ");
-    // morganLogger(tokens, req, res);
-  })
-);
+app.use(logger);
 app.use(express.json());
-app.use("/stats", stats);
 
 //update releasedRes.json every 1 min
-// updateReleasedResJSON();
+updateReleasedResJSON();
 setInterval(() => {
-  // updateReleasedResJSON();
+  updateReleasedResJSON();
 }, 60 * 1000);
 
+getToken();
 //get token initially
-
-getToken().then((res) => {
-  const token = res;
-  console.log("token updated! -", token);
+getToken().then((token) => {
+  console.log("💥token updated! -", token);
 });
 setInterval(async () => {
-  token = await getToken();
+  getToken();
 }, 60 * 1000);
 
+app.use("/stats", stats);
 //get specific result
-app.get("/singleResult/:resultID/:htn", async (req, res) => {
-  try {
-    res.json(await getResult(req.params.resultID, req.params.htn));
-  } catch (err) {
-    res.status(404).json({ message: err });
-  }
-});
-// get all (regular + supply) res of htn
-app.get("/singleResultv2/:htn/:reg/:course/:year/:sem", async (req, res) => {
-  try {
-    res.send(await getFullResult(Object.assign(req.params, { token: token })));
-  } catch (err) {
-    res.status(404).json({ message: err });
-  }
-});
-
-app.get("/batchResult/:resultID/:prefix/:start/:end", async (req, res) => {
-  res.json(
-    await getBatchResult(
-      req.params.resultID,
-      req.params.prefix,
-      req.params.start,
-      req.params.end
-    )
-  );
-  // res.json(req.body)
-});
-app.get(
-  "/batchResultsv2/:rollPrefix/:start/:end/:reg/:course/:year/:sem",
-  async (req, res) => {
-    const results = await getFullBatchResults(
-      Object.assign(req.params, { token: token })
-    );
-    // res.json(await getFullBatchResult(req.params.resultID,
-    //   req.params.prefix,
-    //   req.params.start,
-    //   req.params.end))
-    res.json(results);
-  }
-);
+app.use("/singleResult/v2", singleResultRoute);
+app.use("/batchResults/v2", batchResultRoute);
+app.use("/feedback", feedbackRoute);
+app.use("/rate", rateRoute);
+app.use("/share", shareRoute);
 app.get("/releasedResults", async (req, res) => {
   res.json(await getReleasedResJSON());
 });
 app.get("/resultIDDetails/:resID", async (req, res) => {
   res.json(await getResultIDDetails(req.params.resID));
 });
-app.post("/feedback", async (req, res) => {
-  console.log(req.body);
-  const feedback = new Feedback(req.body);
-  feedback.save().then((result) => {
-    console.log(result);
-    res.status(200).send(result);
-  });
-});
-app.post("/rate", async (req, res) => {
-  console.log("new rating", req.body);
-  const rating = new Rating(req.body);
-  rating.save();
-  res.status(200).send();
-});
 
-app.post("/share", async (req, res) => {
-  console.log(req.body);
-  const share = new Share(req.body);
-  share.save();
-  res.status(200).send();
-});
 // app.use((req, res, next) => {
 //   const err = new Error('Not Found!')
 //   err.status = 404
@@ -185,7 +66,7 @@ app.post("/share", async (req, res) => {
 //     res.status(err.status || 500)
 //     res.json({
 //       error: {
-//         message: error.message
+//         message: err.message
 //       }
 //     })
 //   }
@@ -199,115 +80,6 @@ mongoose.connect(
     else console.error(err);
   }
 );
-
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
-async function getBatchResult(resultID, prefix, start, end) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      //check if result exist in db first
-      let resultList = [];
-      for (let i = start; i < end; i++) {
-        try {
-          resultList.push(
-            await getResultFromDB(resultID, prefix + (i < 10 ? `0${i}` : i))
-          );
-          //console.log(resultList)
-        } catch (err) {
-          console.log(err);
-        }
-      }
-      resolve(resultList);
-    } catch (err) {
-      reject(err);
-    }
-  });
-}
-
-async function getResult(resultID, htn) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      //check if result exist in db first
-      const result = await getResultFromDB(resultID, htn);
-      resolve(result);
-    } catch (err) {
-      reject(err);
-    }
-  });
-}
-
-function getResultFromDB(resultID, htn) {
-  //find in db with htn and resultID
-  return new Promise((resolve, reject) => {
-    Result.find(
-      {
-        $and: [{ htn: htn }, { resultID: resultID }],
-      },
-      async (err, result) => {
-        if (err) return reject(err);
-        if (result.length == 0) {
-          try {
-            const result = await getResultFromJNTU(resultID, htn);
-            resolve(result);
-          } catch (err) {
-            // console.log(err)
-            return reject(err);
-          }
-        } else return resolve(result[0]);
-      }
-    );
-  });
-}
-
-function getResultFromJNTU(resultID, htn) {
-  return new Promise((resolve, reject) => {
-    var config = {
-      method: "get",
-      url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${resultID}&accessToken=${token}`,
-      headers: {
-        Cookie: "PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;",
-      },
-    };
-    axios(config)
-      .then(async (res) => {
-        if (res.data == "Something goes wrong") {
-          console.log(res.data);
-          token = await getToken();
-          return reject("Token updated please reload");
-        }
-        //check if token is expired
-        if (res.data == "Invalid Token") {
-          console.log("token expired");
-          token = await getToken();
-          return reject("Token updated please reload");
-        }
-        //reject if result not found
-        if (res.data.includes("Invalid Hall Ticket Number")) {
-          //removing <b> tag
-          return reject(res.data.replace(/<\/?[^>]+(>|$)/g, ""));
-        }
-        let tableHTML = res.data + "</th></tr></table>";
-        //jntua is a fucking peice of shit for not adding these closings
-        //such a pain
-        const resultObj = convert2obj(tableHTML, resultID);
-
-        const result = new Result(resultObj);
-        result
-          .save()
-          .then(async (data) => {
-            // console.log(data)
-            resolve(await getResultFromDB(resultID, htn));
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        resolve(resultObj);
-      })
-      .catch((err) => {
-        console.log(err);
-        reject("Result not found");
-      });
-  });
-}
