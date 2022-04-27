@@ -20,7 +20,7 @@ export default function getFullSGPA(attempts) {
     //add first attempts to bestAttempts
     for (let i = 0; i < attempts.length; i++) {
       // console.log(attempts[i])
-      if (attempts[i].subjects) {
+      if (attempts[i] && attempts[i].subjects) {
         bestAttempts = attempts[i].subjects;
         break;
       }
