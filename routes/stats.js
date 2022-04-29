@@ -5,12 +5,10 @@ import Feedback from "../models/Feedback.js";
 import Share from "../models/Share.js";
 import Analytics from "../models/Analytics.js";
 import Search from "../models/Search.js";
-import { monthNames } from "../utils/utils.js";
-// import { default as collegesInfo }from "../collegeInfo.json";
-// import collegesInfo from '../collegeInfo.json' assert { type: 'json' };
 import fs from 'fs'
-const collegesInfo = fs.readFileSync('./collegeInfo.json', 'utf8')
-
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const collegesInfo = require('../utils/collegeInfo.json')
 
 router.get("/totalSum", async (req, res) => {
   try {
@@ -53,7 +51,7 @@ router.get("/public", async (req, res) => {
     const searchesArr = await Search.find({}, "-_id  date searchCount").sort({
       date: 1,
     });
-    console.log(searchesArr);
+    // console.log(searchesArr);
     // console.log(results.students)
     //create obj to store stats
     // const searchCount = {};
