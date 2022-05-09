@@ -10,7 +10,10 @@ const FullResultSchema = mongoose.Schema(
     sem: String,
     collegeCode: String,
     attempts: Array,
-    viewCount: Number,
+    viewCount: {
+      type: Number,
+      default: 0,
+    },
     lastViewed: Date,
 
     // resultID:String,
