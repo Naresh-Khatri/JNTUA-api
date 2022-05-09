@@ -119,7 +119,7 @@ export async function getFullResultFromDB(examsList, htn, resInfo) {
             $and: [{ htn: htn }, { year: resInfo.year }, { sem: resInfo.sem }],
           },
           {
-            viewCount: result.viewCount + 1,
+            viewCount: result.viewCount ? result.viewCount + 1 : 1,
           },
           { useFindAndModify: false },
           (err) => {
