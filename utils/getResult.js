@@ -175,7 +175,7 @@ async function getFullResultFromJNTU(examsList, htn, resInfo) {
           }
           // attempts.map(attempt => console.log('attempt', attempt.subjects))
           // console.log('stud abs', studAbsent)
-          console.log(attempts);
+          // console.log(attempts);
 
           const resObj = { ...resInfo };
           //initialize with resInfo
