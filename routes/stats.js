@@ -5,7 +5,6 @@ import Feedback from "../models/Feedback.js";
 import Share from "../models/Share.js";
 import Analytics from "../models/Analytics.js";
 import Search from "../models/Search.js";
-import fs from 'fs'
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const collegesInfo = require('../utils/collegeInfo.json')
@@ -75,6 +74,7 @@ router.get("/public", async (req, res) => {
     // }
     // let arr = Object.entries(searchCount)
     // arr.sort(([a, b], [c, d]) => d - b)
+    console.log(result)
     const topColleges = [];
     for (let i = 0; i < 3; i++) {
       //loop through entire json to fine college name for code
