@@ -6,7 +6,7 @@ export default async function getAttempt(result, htn) {
     // console.log('token', token)
     var config = {
       method: "get",
-      url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${result.resultID}&accessToken=${process.env.ACCESS_TOKEN}`,
+      url: `https://archive.jntuaresults.ac.in/results/res.php?ht=${htn}&id=${result.resultID}&accessToken=${process.env.ACCESS_TOKEN}`,
       headers: {
         Cookie: "PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;",
       },

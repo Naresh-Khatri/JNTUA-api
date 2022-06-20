@@ -15,7 +15,7 @@ function getToken() {
   return new Promise((resolve, reject) => {
     var config = {
       method: "get",
-      url: "https://jntuaresults.ac.in/view-results-56736665.html",
+      url: "https://archive.jntuaresults.ac.in/view-results-56736665.html",
       headers: {
         Cookie: "PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;",
       },
@@ -219,7 +219,7 @@ function getResultFromJNTU(resultID, htn) {
   return new Promise((resolve, reject) => {
     var config = {
       method: "get",
-      url: `https://jntuaresults.ac.in/results/res.php?ht=${htn}&id=${resultID}&accessToken=${token}`,
+      url: `https://archive.jntuaresults.ac.in/results/res.php?ht=${htn}&id=${resultID}&accessToken=${token}`,
       headers: {
         Cookie: "PHPSESSID=kk98b6kd3oaft9p9p8uiis6ae6;",
       },
@@ -703,7 +703,7 @@ function getFullBatchResults(data) {
 function getResultIDDetails(resultID) {
   return new Promise((resolve) => {
     axios
-      .get("https://jntuaresults.ac.in/index.php")
+      .get("https://archive.jntuaresults.ac.in/index.php")
       .then((res) => {
         const soup = new JSSoup(res.data);
         //get content of 2nd table

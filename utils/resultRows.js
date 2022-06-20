@@ -9,7 +9,7 @@ let resultsObj = {};
 const getAllResultsRows = function () {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://jntuaresults.ac.in/index.php")
+      .get("https://archive.jntuaresults.ac.in/")
       .then((res) => {
         const soup = new JSSoup(res.data);
         //get content of 2nd table
